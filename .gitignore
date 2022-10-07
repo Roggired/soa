@@ -1,3 +1,7 @@
 /.idea/
+/.gradle/
 /build/
+/collection/build/
+/demography/build/
 *.iml
+/deployments/

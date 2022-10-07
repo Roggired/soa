@@ -1,0 +1,26 @@
+services:
+  db:
+    image: postgres:latest
+    environment:
+      - POSTGRES_DB=soa
+      - POSTGRES_USER=soa
+      - POSTGRES_PASSWORD=soa
+    networks:
+      soa:
+        ipv4_address: 172.18.0.2
+  server:
+#    image: quay.io/wildfly/wildfly
+    build: .
+    volumes:
+      - ./deployments:/opt/jboss/wildfly/standalone/deployments
+    networks:
+      soa:
+        ipv4_address: 172.18.0.3
+
+networks:
+  soa:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.18.0.0/24
+          gateway: 172.18.0.1
