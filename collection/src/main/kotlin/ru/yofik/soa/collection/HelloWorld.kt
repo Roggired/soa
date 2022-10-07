@@ -1,5 +1,6 @@
 package ru.yofik.soa.collection
 
+import ru.yofik.soa.collection.infrastucture.storage.AbstractDao
 import javax.ws.rs.Consumes
 import javax.ws.rs.GET
 import javax.ws.rs.Path
@@ -12,6 +13,7 @@ import javax.ws.rs.core.MediaType
 class HelloWorld {
     @GET
     fun hello(): String {
+        AbstractDao().getConnection()
         return "<hello>Hello, World! Collection</hello>"
     }
 }

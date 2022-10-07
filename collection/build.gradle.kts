@@ -18,6 +18,8 @@ dependencies {
     providedCompile("javax.ws.rs:javax.ws.rs-api:2.1.1")
     providedCompile("javax.annotation:javax.annotation-api:1.3.2")
     providedCompile("javax.xml.bind:jaxb-api:2.3.1")
+    providedCompile("javax.ejb:javax.ejb-api:3.2.2")
+    compileOnly("javax.enterprise:cdi-api:2.0.SP1")
 
     // db
     implementation("org.postgresql:postgresql:42.5.0")

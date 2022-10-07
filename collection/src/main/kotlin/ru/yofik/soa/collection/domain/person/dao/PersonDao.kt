@@ -1,0 +1,249 @@
+package ru.yofik.soa.collection.domain.person.dao
+
+import ru.yofik.soa.collection.domain.person.model.Color
+import ru.yofik.soa.collection.domain.person.model.Coordinates
+import ru.yofik.soa.collection.domain.person.model.Location
+import ru.yofik.soa.collection.domain.person.model.Person
+import ru.yofik.soa.collection.infrastucture.storage.AbstractDao
+import java.lang.IllegalArgumentException
+import java.sql.Connection
+import java.sql.SQLException
+import java.sql.Timestamp
+import javax.ejb.Stateless
+
+@Stateless
+class PersonDao: AbstractDao() {
+    fun create(person: Person): Person {
+        val connection = getConnection()
+        connection.autoCommit = false
+        connection.transactionIsolation = Connection.TRANSACTION_REPEATABLE_READ
+
+        try {
+            val locationId = createLocation(connection, person.location)
+            val coordinatesId = createCoordinates(connection, person.coordinates)
+            val personId = createPerson(connection, person, locationId, coordinatesId)
+
+            person.id = personId
+            person.location.id = locationId
+            person.coordinates.id = coordinatesId
+
+            connection.commit()
+
+            return person
+        } catch (e: SQLException) {
+            connection.rollback()
+            throw e
+        } finally {
+            connection.close()
+        }
+    }
+
+    private fun createPerson(
+        connection: Connection,
+        person: Person,
+        locationId: Long,
+        coordinatesId: Long
+    ): Int {
+        val preparedStatement = connection.prepareStatement(
+            "INSERT INTO person(name, coordinates_id, creation_date, height, birthday, eye_color, hair_color, location_id) " +
+                    "VALUES(?, ?, ?, ?, ?, ?, ?, ?) RETURNING id"
+        ).apply {
+            setString(1, person.name)
+            setLong(2, coordinatesId)
+            setTimestamp(3, Timestamp.valueOf(person.creationDate.atTime(0, 0)))
+            setInt(4, person.height)
+            setTimestamp(5, Timestamp.valueOf(person.birthday))
+            setString(6, person.eyeColor.toString())
+            setString(7, person.hairColor?.toString())
+            setLong(8, locationId)
+        }
+
+        val resultSet = preparedStatement.executeQuery()
+        resultSet.next()
+        return resultSet.getInt(1)
+    }
+
+    private fun createLocation(connection: Connection, location: Location): Long {
+        val preparedStatement = connection.prepareStatement(
+            "INSERT INTO location(x, y, z, name) VALUES(?, ?, ?, ?) RETURNING id"
+        ).apply {
+            setLong(1, location.x)
+            setFloat(2, location.y)
+            setFloat(3, location.z)
+            setString(4, location.name)
+        }
+
+        val resultSet = preparedStatement.executeQuery()
+        resultSet.next()
+        return resultSet.getLong(1)
+    }
+
+    private fun createCoordinates(connection: Connection, coordinates: Coordinates): Long {
+        val preparedStatement = connection.prepareStatement(
+            "INSERT INTO coordinates(x, y) VALUES(?, ?) RETURNING id"
+        ).apply {
+            setLong(1, coordinates.x)
+            setDouble(2, coordinates.y)
+        }
+
+        val resultSet = preparedStatement.executeQuery()
+        resultSet.next()
+        return resultSet.getLong(1)
+    }
+
+    fun update(person: Person): Person {
+        val connection = getConnection()
+        connection.autoCommit = false
+        connection.transactionIsolation = Connection.TRANSACTION_REPEATABLE_READ
+
+        try {
+            updateLocation(connection, person.location)
+            updateCoordinates(connection, person.coordinates)
+            updatePerson(connection, person)
+
+            connection.commit()
+
+            return person
+        } catch (e: SQLException) {
+            connection.rollback()
+            throw e
+        } finally {
+            connection.close()
+        }
+    }
+
+    private fun updatePerson(connection: Connection, person: Person) {
+        val preparedStatement = connection.prepareStatement(
+            "UPDATE person SET name=?,creation_date=?,height=?,birthday=?,eye_color=?,hair_color=? WHERE id=?"
+        ).apply {
+            setString(1, person.name)
+            setTimestamp(2, Timestamp.valueOf(person.creationDate.atTime(0, 0)))
+            setInt(3, person.height)
+            setTimestamp(4, Timestamp.valueOf(person.birthday))
+            setString(5, person.eyeColor.toString())
+            setString(6, person.hairColor?.toString())
+            setInt(7, person.id)
+        }
+        preparedStatement.executeUpdate()
+    }
+
+    private fun updateLocation(connection: Connection, location: Location) {
+        val preparedStatement = connection.prepareStatement(
+            "UPDATE location SET x = ?, y = ?, z = ?, name = ? WHERE id = ?"
+        ).apply {
+            setLong(1, location.x)
+            setFloat(2, location.y)
+            setFloat(3, location.z)
+            setString(4, location.name)
+            setLong(5, location.id)
+        }
+        preparedStatement.executeUpdate()
+    }
+
+    private fun updateCoordinates(connection: Connection, coordinates: Coordinates) {
+        val preparedStatement = connection.prepareStatement(
+            "UPDATE coordinates SET x = ?, y = ? WHERE id = ?"
+        ).apply {
+            setLong(1, coordinates.x)
+            setDouble(2, coordinates.y)
+            setLong(3, coordinates.id)
+        }
+        preparedStatement.executeUpdate()
+    }
+
+    fun delete(id: Int) {
+        val connection = getConnection()
+        connection.autoCommit = false
+        connection.transactionIsolation = Connection.TRANSACTION_READ_UNCOMMITTED
+
+        try {
+            val person = getById(id) ?: return
+            deletePerson(connection, person.id)
+            deleteCoordinates(connection, person.coordinates.id)
+            deleteLocation(connection, person.location.id)
+
+            connection.commit()
+        } catch (e: SQLException) {
+            connection.rollback()
+            throw e
+        } finally {
+            connection.close()
+        }
+    }
+
+    private fun deletePerson(connection: Connection, id: Int) {
+        val preparedStatement = connection.prepareStatement(
+            "DELETE FROM person WHERE id = ?"
+        ).apply {
+            setInt(1, id)
+        }
+        preparedStatement.executeUpdate()
+    }
+
+    private fun deleteCoordinates(connection: Connection, id: Long) {
+        val preparedStatement = connection.prepareStatement(
+            "DELETE FROM coordinates WHERE id = ?"
+        ).apply {
+            setLong(1, id)
+        }
+        preparedStatement.executeUpdate()
+    }
+
+    private fun deleteLocation(connection: Connection, id: Long) {
+        val preparedStatement = connection.prepareStatement(
+            "DELETE FROM location WHERE id = ?"
+        ).apply {
+            setLong(1, id)
+        }
+        preparedStatement.executeUpdate()
+    }
+
+    fun getById(id: Int): Person? {
+        val connection = getConnection()
+        val preparedStatement = connection.prepareStatement(
+            """
+                SELECT person.id,person.name,
+                       person.coordinates_id,coordinates.x,coordinates.y,
+                       persion.creation_date,person.height,person.birthday,person.eye_color, person.hair_color,
+                       person.location_id,location.x,location.y,location.z,location.name
+                FROM person 
+                LEFT JOIN coordinates ON person.coordinates_id = coordinates.id 
+                LEFT JOIN location ON person.location_id = location.id 
+                WHERE person.id = ?
+            """.trimIndent()
+        ).apply {
+            setInt(1, id)
+        }
+
+        val resultSet = preparedStatement.executeQuery()
+        if (!resultSet.next()) {
+            return null
+        }
+
+        val person = Person(
+            id = resultSet.getInt(1),
+            name = resultSet.getString(2),
+            coordinates = Coordinates(
+                id = resultSet.getLong(3),
+                x = resultSet.getLong(4),
+                y = resultSet.getDouble(5)
+            ),
+            creationDate = resultSet.getTimestamp(6).toLocalDateTime().toLocalDate(),
+            height = resultSet.getInt(7),
+            birthday = resultSet.getTimestamp(8).toLocalDateTime(),
+            eyeColor = Color.valueOf(resultSet.getString(9)),
+            hairColor = if (resultSet.getString(10) == null) null else Color.valueOf(resultSet.getString(10)),
+            location = Location(
+                id = resultSet.getLong(11),
+                x = resultSet.getLong(12),
+                y = resultSet.getFloat(13),
+                z = resultSet.getFloat(14),
+                name = resultSet.getString(15)
+            )
+        )
+
+        connection.close()
+
+        return person
+    }
+}
