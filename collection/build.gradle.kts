@@ -1,7 +1,10 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.7.10"
+    kotlin("jvm")
+    kotlin("plugin.allopen")
+    kotlin("plugin.noarg")
+    kotlin("kapt")
     id("war")
 }
 
@@ -12,6 +15,17 @@ repositories {
     mavenCentral()
 }
 
+allOpen {
+    annotations(
+        "javax.ejb.Stateless",
+        "javax.ejb.Stateful",
+        "javax.ws.rs.Path",
+        "javax.enterprise.context.ApplicationScoped",
+        "javax.enterprise.context.RequestScope"
+    )
+}
+
+
 dependencies {
     // web
     providedCompile("javax.validation:validation-api:2.0.1.Final")
@@ -20,6 +34,8 @@ dependencies {
     providedCompile("javax.xml.bind:jaxb-api:2.3.1")
     providedCompile("javax.ejb:javax.ejb-api:3.2.2")
     compileOnly("javax.enterprise:cdi-api:2.0.SP1")
+
+    implementation("com.google.code.gson:gson:2.9.1")
 
     // db
     implementation("org.postgresql:postgresql:42.5.0")

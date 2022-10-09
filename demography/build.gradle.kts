@@ -1,8 +1,19 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.7.10"
+    kotlin("jvm")
+    kotlin("plugin.allopen")
+    kotlin("plugin.noarg")
+    kotlin("kapt")
     id("war")
+}
+
+allOpen {
+    annotations(
+        "javax.ejb.Stateless",
+        "javax.ejb.Stateful",
+        "javax.ws.rs.Path"
+    )
 }
 
 group = "ru.yofik"

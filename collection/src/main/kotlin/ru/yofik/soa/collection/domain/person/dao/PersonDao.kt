@@ -1,17 +1,19 @@
 package ru.yofik.soa.collection.domain.person.dao
 
+import ru.yofik.soa.collection.domain.Page
 import ru.yofik.soa.collection.domain.person.model.Color
 import ru.yofik.soa.collection.domain.person.model.Coordinates
 import ru.yofik.soa.collection.domain.person.model.Location
 import ru.yofik.soa.collection.domain.person.model.Person
 import ru.yofik.soa.collection.infrastucture.storage.AbstractDao
-import java.lang.IllegalArgumentException
 import java.sql.Connection
+import java.sql.ResultSet
 import java.sql.SQLException
 import java.sql.Timestamp
 import javax.ejb.Stateless
+import javax.enterprise.context.ApplicationScoped
 
-@Stateless
+@ApplicationScoped
 class PersonDao: AbstractDao() {
     fun create(person: Person): Person {
         val connection = getConnection()
@@ -220,7 +222,90 @@ class PersonDao: AbstractDao() {
             return null
         }
 
-        val person = Person(
+        val person = extractPersonFromResultSet(resultSet)
+
+        connection.close()
+
+        return person
+    }
+
+    fun getByFilters(
+        filters: Map<Pair<String, String>, Any>,
+        sort: Collection<String>,
+        pageSize: Int,
+        pageIndex: Int
+    ): Page<Person> {
+        val connection = getConnection()
+
+        var sql = """
+                SELECT person.id,person.name,
+                       person.coordinates_id,coordinates.x,coordinates.y,
+                       persion.creation_date,person.height,person.birthday,person.eye_color, person.hair_color,
+                       person.location_id,location.x,location.y,location.z,location.name,COUNT(person.id)
+                FROM person 
+                LEFT JOIN coordinates ON person.coordinates_id = coordinates.id 
+                LEFT JOIN location ON person.location_id = location.id 
+            """.trimIndent()
+        if (filters.isNotEmpty()) {
+            sql += " WHERE "
+            val whereClauses = filters.map { (pair, _) -> "${pair.first} ${pair.second} ?" }
+            sql += whereClauses.joinToString(separator = " AND ")
+        }
+
+        if (sort.isEmpty()) {
+            sql += " ORDER BY person.id "
+        } else {
+            sql += " ORDER BY "
+            sql += sort.joinToString(separator = ",")
+        }
+
+        sql += " LIMIT $pageSize OFFSET ${pageIndex * pageSize}"
+
+        val preparedStatement = connection.prepareStatement(sql.trimIndent())
+        preparedStatement.apply {
+            var index = 1
+            for (entry in filters.entries) {
+                preparedStatement.setObject(index++, entry.value)
+            }
+        }
+
+        val page: Page<Person>
+        val resultSet = preparedStatement.executeQuery()
+        if (!resultSet.next()) {
+            return Page(
+                pageSize = pageSize,
+                pageIndex = pageIndex,
+                elementsTotal = 0,
+                pagesTotal = 0,
+                payload = emptyList()
+            )
+        }
+
+        val elementsTotal = resultSet.getInt(16)
+        val pagesTotal = if (elementsTotal % pageSize == 0) elementsTotal / pageSize else elementsTotal / pageSize + 1
+        val payload = mutableListOf<Person>()
+
+        while (true) {
+            payload.add(extractPersonFromResultSet(resultSet))
+
+            if (!resultSet.next()) break
+        }
+
+        page = Page(
+            pageSize = pageSize,
+            pageIndex = pageIndex,
+            elementsTotal = elementsTotal,
+            pagesTotal = pagesTotal,
+            payload = payload
+        )
+
+        connection.close()
+
+        return page
+    }
+
+    private fun extractPersonFromResultSet(resultSet: ResultSet): Person {
+        return Person(
             id = resultSet.getInt(1),
             name = resultSet.getString(2),
             coordinates = Coordinates(
@@ -241,9 +326,5 @@ class PersonDao: AbstractDao() {
                 name = resultSet.getString(15)
             )
         )
-
-        connection.close()
-
-        return person
     }
 }

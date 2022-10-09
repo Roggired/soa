@@ -13,6 +13,10 @@ services:
     build: .
     volumes:
       - ./deployments:/opt/jboss/wildfly/standalone/deployments
+    environment:
+      - SOA_DB=jdbc:postgresql://172.18.0.2:5432/soa
+      - SOA_USER=soa
+      - SOA_PASSWORD=soa
     networks:
       soa:
         ipv4_address: 172.18.0.3
