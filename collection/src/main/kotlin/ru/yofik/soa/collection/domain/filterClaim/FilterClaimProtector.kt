@@ -7,8 +7,7 @@ class FilterClaimProtector {
     fun protectFilterClaims(filterClaims: List<FilterClaim>): List<FilterClaim> {
         return filterClaims.map {
             FilterClaim(
-                entityName = protectString(it.entityName),
-                propertyName = protectString(it.propertyName),
+                property = it.property,
                 filter = if (it.filter is String) protectString(it.filter) else it.filter,
                 sort = it.sort
             )

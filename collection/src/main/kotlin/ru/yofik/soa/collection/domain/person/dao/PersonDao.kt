@@ -6,11 +6,11 @@ import ru.yofik.soa.collection.domain.person.model.Coordinates
 import ru.yofik.soa.collection.domain.person.model.Location
 import ru.yofik.soa.collection.domain.person.model.Person
 import ru.yofik.soa.collection.infrastucture.storage.AbstractDao
+import ru.yofik.soa.collection.utils.log
 import java.sql.Connection
 import java.sql.ResultSet
 import java.sql.SQLException
 import java.sql.Timestamp
-import javax.ejb.Stateless
 import javax.enterprise.context.ApplicationScoped
 
 @ApplicationScoped
@@ -206,7 +206,7 @@ class PersonDao: AbstractDao() {
             """
                 SELECT person.id,person.name,
                        person.coordinates_id,coordinates.x,coordinates.y,
-                       persion.creation_date,person.height,person.birthday,person.eye_color, person.hair_color,
+                       person.creation_date,person.height,person.birthday,person.eye_color, person.hair_color,
                        person.location_id,location.x,location.y,location.z,location.name
                 FROM person 
                 LEFT JOIN coordinates ON person.coordinates_id = coordinates.id 
@@ -237,31 +237,28 @@ class PersonDao: AbstractDao() {
     ): Page<Person> {
         val connection = getConnection()
 
-        var sql = """
-                SELECT person.id,person.name,
-                       person.coordinates_id,coordinates.x,coordinates.y,
-                       persion.creation_date,person.height,person.birthday,person.eye_color, person.hair_color,
-                       person.location_id,location.x,location.y,location.z,location.name,COUNT(person.id)
-                FROM person 
-                LEFT JOIN coordinates ON person.coordinates_id = coordinates.id 
-                LEFT JOIN location ON person.location_id = location.id 
-            """.trimIndent()
-        if (filters.isNotEmpty()) {
-            sql += " WHERE "
-            val whereClauses = filters.map { (pair, _) -> "${pair.first} ${pair.second} ?" }
-            sql += whereClauses.joinToString(separator = " AND ")
+        val countPreparedStatement = connection.prepareStatement(
+            constructCountQuery(filters)
+        )
+        countPreparedStatement.apply {
+            var index = 1
+            for (entry in filters.entries) {
+                countPreparedStatement.setObject(index++, entry.value)
+            }
         }
 
-        if (sort.isEmpty()) {
-            sql += " ORDER BY person.id "
-        } else {
-            sql += " ORDER BY "
-            sql += sort.joinToString(separator = ",")
-        }
+        val countResultSet = countPreparedStatement.executeQuery()
+        countResultSet.next()
+        val elementsTotal = countResultSet.getInt(1)
 
-        sql += " LIMIT $pageSize OFFSET ${pageIndex * pageSize}"
-
-        val preparedStatement = connection.prepareStatement(sql.trimIndent())
+        val preparedStatement = connection.prepareStatement(
+            constructSelectQuery(
+                filters,
+                sort,
+                pageSize,
+                pageIndex
+            )
+        )
         preparedStatement.apply {
             var index = 1
             for (entry in filters.entries) {
@@ -277,11 +274,10 @@ class PersonDao: AbstractDao() {
                 pageIndex = pageIndex,
                 elementsTotal = 0,
                 pagesTotal = 0,
-                payload = emptyList()
+                content = emptyList()
             )
         }
 
-        val elementsTotal = resultSet.getInt(16)
         val pagesTotal = if (elementsTotal % pageSize == 0) elementsTotal / pageSize else elementsTotal / pageSize + 1
         val payload = mutableListOf<Person>()
 
@@ -296,12 +292,75 @@ class PersonDao: AbstractDao() {
             pageIndex = pageIndex,
             elementsTotal = elementsTotal,
             pagesTotal = pagesTotal,
-            payload = payload
+            content = payload
         )
 
         connection.close()
 
         return page
+    }
+
+    private fun constructSelectQuery(
+        filters: Map<Pair<String, String>, Any>,
+        sort: Collection<String>,
+        pageSize: Int,
+        pageIndex: Int
+    ): String {
+        var sql = """
+                SELECT person.id,person.name,
+                       person.coordinates_id,coordinates.x,coordinates.y,
+                       person.creation_date,person.height,person.birthday,person.eye_color, person.hair_color,
+                       person.location_id,location.x,location.y,location.z,location.name
+                FROM person 
+                LEFT JOIN coordinates ON person.coordinates_id = coordinates.id 
+                LEFT JOIN location ON person.location_id = location.id 
+            """.trimIndent()
+        if (filters.isNotEmpty()) {
+            sql += " WHERE "
+            val whereClauses = filters.map { (pair, _) ->
+                if (pair.second.lowercase() == "like") {
+                    "${pair.first} LIKE ? || '%'"
+                } else {
+                    "${pair.first} ${pair.second} ?"
+                }
+            }
+            sql += whereClauses.joinToString(separator = " AND ")
+        }
+
+        if (sort.isEmpty()) {
+            sql += " ORDER BY person.id "
+        } else {
+            sql += " ORDER BY "
+            sql += sort.joinToString(separator = ",")
+        }
+
+        sql += " LIMIT $pageSize OFFSET ${pageIndex * pageSize}"
+
+        return sql
+    }
+
+    private fun constructCountQuery(
+        filters: Map<Pair<String, String>, Any>,
+    ): String {
+        var sql = """
+                SELECT COUNT(*)
+                FROM person 
+                LEFT JOIN coordinates ON person.coordinates_id = coordinates.id 
+                LEFT JOIN location ON person.location_id = location.id 
+            """.trimIndent()
+        if (filters.isNotEmpty()) {
+            sql += " WHERE "
+            val whereClauses = filters.map { (pair, _) ->
+                if (pair.second.lowercase() == "like") {
+                    "${pair.first} LIKE ? || '%'"
+                } else {
+                    "${pair.first} ${pair.second} ?"
+                }
+            }
+            sql += whereClauses.joinToString(separator = " AND ")
+        }
+
+        return sql
     }
 
     private fun extractPersonFromResultSet(resultSet: ResultSet): Person {

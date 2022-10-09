@@ -15,16 +15,11 @@ class FilterClaimGsonDeserializer: JsonDeserializer<FilterClaim> {
     override fun deserialize(json: JsonElement?, typeOfT: Type?, context: JsonDeserializationContext?): FilterClaim {
         val filterClaimObject = json?.asJsonObject ?: throw FilterClaimFormatException("FilterClaim's object is null")
 
-        val entityName = filterClaimObject.get("entityName").asString
-        val propertyName = filterClaimObject.get("propertyName").asString
+        val propertyString = filterClaimObject.get("property").asString
         val sortString = filterClaimObject.get("sort").asString
 
-        if (entityName == null) {
-            throw FilterClaimFormatException("FilterClaim's entityName field cannot be null")
-        }
-
-        if (propertyName == null) {
-            throw FilterClaimFormatException("FilterClaim's propertyName field cannot be null")
+        if (propertyString == null) {
+            throw FilterClaimFormatException("FilterClaim's property field cannot be null")
         }
 
         if (sortString == null) {
@@ -32,11 +27,18 @@ class FilterClaimGsonDeserializer: JsonDeserializer<FilterClaim> {
         }
 
         return FilterClaim(
-            entityName = entityName,
-            propertyName = propertyName,
+            property = parseProperty(propertyString),
             filter = parseFilter(filterClaimObject),
             sort = parseSort(sortString)
         )
+    }
+
+    private fun parseProperty(propertyString: String): FilterableProperties {
+        try {
+            return FilterableProperties.valueOf(propertyString)
+        } catch (e: IllegalArgumentException) {
+            throw FilterClaimFormatException("FilterClaim's filed property has illegal value")
+        }
     }
 
     private fun parseSort(sortString: String): SortOrder {

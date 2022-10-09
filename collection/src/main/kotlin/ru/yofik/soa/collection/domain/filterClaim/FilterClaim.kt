@@ -7,8 +7,7 @@ enum class SortOrder {
 }
 
 data class FilterClaim(
-    val entityName: String,
-    val propertyName: String,
+    val property: FilterableProperties,
     val filter: Any?,
     val sort: SortOrder
 )
