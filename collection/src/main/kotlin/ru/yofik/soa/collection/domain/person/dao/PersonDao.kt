@@ -15,6 +15,71 @@ import javax.enterprise.context.ApplicationScoped
 
 @ApplicationScoped
 class PersonDao: AbstractDao() {
+    fun getByName(namePrefix: String): List<Person> {
+        val connection = getConnection()
+
+        val preparedStatement = connection.prepareStatement(
+            """
+                SELECT person.id,person.name,
+                       person.coordinates_id,coordinates.x,coordinates.y,
+                       person.creation_date,person.height,person.birthday,person.eye_color, person.hair_color,
+                       person.location_id,location.x,location.y,location.z,location.name
+                FROM person 
+                LEFT JOIN coordinates ON person.coordinates_id = coordinates.id 
+                LEFT JOIN location ON person.location_id = location.id 
+                WHERE person.name LIKE ? || '%'
+            """.trimIndent()
+        ).apply {
+            setString(1, namePrefix)
+        }
+        val resultSet = preparedStatement.executeQuery()
+        val result = mutableListOf<Person>()
+
+        while (resultSet.next()) {
+            result.add(extractPersonFromResultSet(resultSet))
+        }
+
+        connection.close()
+
+        return result
+    }
+
+    fun getMeanHeight(): Double {
+        val connection = getConnection()
+
+        val preparedStatement = connection.prepareStatement(
+            """
+                SELECT AVG(person.height) FROM person                  
+            """.trimIndent()
+        )
+        val resultSet = preparedStatement.executeQuery()
+        resultSet.next()
+        val result = resultSet.getDouble(1)
+
+        connection.close()
+
+        return result
+    }
+
+    fun getAmountUnderHeight(targetHeight: Int): Int {
+        val connection = getConnection()
+
+        val preparedStatement = connection.prepareStatement(
+            """
+                SELECT COUNT(*) FROM person WHERE height < ?                 
+            """.trimIndent()
+        ).apply {
+            setInt(1, targetHeight)
+        }
+        val resultSet = preparedStatement.executeQuery()
+        resultSet.next()
+        val result = resultSet.getInt(1)
+
+        connection.close()
+
+        return result
+    }
+
     fun create(person: Person): Person {
         val connection = getConnection()
         connection.autoCommit = false
