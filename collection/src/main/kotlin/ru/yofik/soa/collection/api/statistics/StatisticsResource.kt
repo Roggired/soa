@@ -1,8 +1,8 @@
 package ru.yofik.soa.collection.api.statistics
 
-import ru.yofik.soa.collection.api.ResponseDouble
-import ru.yofik.soa.collection.api.ResponseInteger
-import ru.yofik.soa.collection.api.ResponseListPerson
+import ru.yofik.soa.common.ResponseDouble
+import ru.yofik.soa.common.ResponseInteger
+import ru.yofik.soa.common.ResponseListPerson
 import ru.yofik.soa.collection.domain.statistics.StatisticsService
 import javax.inject.Inject
 import javax.ws.rs.POST

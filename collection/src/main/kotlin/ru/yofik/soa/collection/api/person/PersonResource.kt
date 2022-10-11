@@ -1,10 +1,10 @@
 package ru.yofik.soa.collection.api.person
 
 import ru.yofik.soa.collection.api.PageRequest
-import ru.yofik.soa.collection.api.ResponsePage
-import ru.yofik.soa.collection.api.ResponsePerson
-import ru.yofik.soa.collection.api.ResponseString
-import ru.yofik.soa.collection.domain.person.model.Person
+import ru.yofik.soa.common.ResponsePage
+import ru.yofik.soa.common.ResponsePerson
+import ru.yofik.soa.common.ResponseString
+import ru.yofik.soa.common.domain.person.model.Person
 import ru.yofik.soa.collection.domain.person.service.PersonService
 import javax.inject.Inject
 import javax.ws.rs.*

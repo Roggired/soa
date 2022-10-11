@@ -1,6 +1,6 @@
-package ru.yofik.soa.collection.utils
+package ru.yofik.soa.common.utils
 
-import ru.yofik.soa.collection.domain.person.model.Color
+import ru.yofik.soa.common.domain.person.model.Color
 import java.time.LocalDate
 import java.time.LocalDateTime
 import javax.xml.bind.annotation.adapters.XmlAdapter

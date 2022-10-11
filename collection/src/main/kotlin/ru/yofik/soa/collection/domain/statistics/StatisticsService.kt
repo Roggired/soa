@@ -1,7 +1,7 @@
 package ru.yofik.soa.collection.domain.statistics
 
 import ru.yofik.soa.collection.domain.person.dao.PersonDao
-import ru.yofik.soa.collection.domain.person.model.Person
+import ru.yofik.soa.common.domain.person.model.Person
 import javax.enterprise.context.ApplicationScoped
 import javax.inject.Inject
 

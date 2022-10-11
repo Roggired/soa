@@ -1,4 +1,4 @@
-package ru.yofik.soa.collection.api
+package ru.yofik.soa.common
 
 class InvalidDataException(
     message: String

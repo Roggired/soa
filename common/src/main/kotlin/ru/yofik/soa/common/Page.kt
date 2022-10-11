@@ -1,9 +1,9 @@
-package ru.yofik.soa.collection.domain
+package ru.yofik.soa.common
 
-import ru.yofik.soa.collection.domain.person.model.Color
-import ru.yofik.soa.collection.domain.person.model.Coordinates
-import ru.yofik.soa.collection.domain.person.model.Location
-import ru.yofik.soa.collection.domain.person.model.Person
+import ru.yofik.soa.common.domain.person.model.Color
+import ru.yofik.soa.common.domain.person.model.Coordinates
+import ru.yofik.soa.common.domain.person.model.Location
+import ru.yofik.soa.common.domain.person.model.Person
 import javax.xml.bind.annotation.XmlAccessType
 import javax.xml.bind.annotation.XmlAccessorType
 import javax.xml.bind.annotation.XmlRootElement
@@ -17,13 +17,13 @@ data class Page<T>(
     val pageIndex: Int,
     val elementsTotal: Int,
     val pagesTotal: Int,
-    val content: List<T>
+    val content: MutableList<T>
 ) {
     constructor(): this(
         pageSize = 1,
         pageIndex = 0,
         elementsTotal = 0,
         pagesTotal = 0,
-        content = emptyList()
+        content = mutableListOf()
     )
 }

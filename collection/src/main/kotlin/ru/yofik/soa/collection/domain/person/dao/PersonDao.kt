@@ -1,12 +1,11 @@
 package ru.yofik.soa.collection.domain.person.dao
 
-import ru.yofik.soa.collection.domain.Page
-import ru.yofik.soa.collection.domain.person.model.Color
-import ru.yofik.soa.collection.domain.person.model.Coordinates
-import ru.yofik.soa.collection.domain.person.model.Location
-import ru.yofik.soa.collection.domain.person.model.Person
+import ru.yofik.soa.common.Page
 import ru.yofik.soa.collection.infrastucture.storage.AbstractDao
-import ru.yofik.soa.collection.utils.log
+import ru.yofik.soa.common.domain.person.model.Color
+import ru.yofik.soa.common.domain.person.model.Coordinates
+import ru.yofik.soa.common.domain.person.model.Location
+import ru.yofik.soa.common.domain.person.model.Person
 import java.sql.Connection
 import java.sql.ResultSet
 import java.sql.SQLException
@@ -23,6 +22,7 @@ class PersonDao: AbstractDao() {
                 SELECT person.id,person.name,
                        person.coordinates_id,coordinates.x,coordinates.y,
                        person.creation_date,person.height,person.birthday,person.eye_color, person.hair_color,
+                       person.nationality,
                        person.location_id,location.x,location.y,location.z,location.name
                 FROM person 
                 LEFT JOIN coordinates ON person.coordinates_id = coordinates.id 
@@ -112,8 +112,8 @@ class PersonDao: AbstractDao() {
         coordinatesId: Long
     ): Int {
         val preparedStatement = connection.prepareStatement(
-            "INSERT INTO person(name, coordinates_id, creation_date, height, birthday, eye_color, hair_color, location_id) " +
-                    "VALUES(?, ?, ?, ?, ?, ?, ?, ?) RETURNING id"
+            "INSERT INTO person(name, coordinates_id, creation_date, height, birthday, eye_color, hair_color, location_id, nationality) " +
+                    "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id"
         ).apply {
             setString(1, person.name)
             setLong(2, coordinatesId)
@@ -123,6 +123,7 @@ class PersonDao: AbstractDao() {
             setString(6, person.eyeColor.toString())
             setString(7, person.hairColor?.toString())
             setLong(8, locationId)
+            setString(9, person.nationality)
         }
 
         val resultSet = preparedStatement.executeQuery()
@@ -181,7 +182,7 @@ class PersonDao: AbstractDao() {
 
     private fun updatePerson(connection: Connection, person: Person) {
         val preparedStatement = connection.prepareStatement(
-            "UPDATE person SET name=?,creation_date=?,height=?,birthday=?,eye_color=?,hair_color=? WHERE id=?"
+            "UPDATE person SET name=?,creation_date=?,height=?,birthday=?,eye_color=?,hair_color=?,nationality=? WHERE id=?"
         ).apply {
             setString(1, person.name)
             setTimestamp(2, Timestamp.valueOf(person.creationDate.atTime(0, 0)))
@@ -189,7 +190,8 @@ class PersonDao: AbstractDao() {
             setTimestamp(4, Timestamp.valueOf(person.birthday))
             setString(5, person.eyeColor.toString())
             setString(6, person.hairColor?.toString())
-            setInt(7, person.id)
+            setString(7, person.nationality)
+            setInt(8, person.id)
         }
         preparedStatement.executeUpdate()
     }
@@ -272,6 +274,7 @@ class PersonDao: AbstractDao() {
                 SELECT person.id,person.name,
                        person.coordinates_id,coordinates.x,coordinates.y,
                        person.creation_date,person.height,person.birthday,person.eye_color, person.hair_color,
+                       person.nationality,
                        person.location_id,location.x,location.y,location.z,location.name
                 FROM person 
                 LEFT JOIN coordinates ON person.coordinates_id = coordinates.id 
@@ -339,7 +342,7 @@ class PersonDao: AbstractDao() {
                 pageIndex = pageIndex,
                 elementsTotal = 0,
                 pagesTotal = 0,
-                content = emptyList()
+                content = mutableListOf()
             )
         }
 
@@ -375,6 +378,7 @@ class PersonDao: AbstractDao() {
                 SELECT person.id,person.name,
                        person.coordinates_id,coordinates.x,coordinates.y,
                        person.creation_date,person.height,person.birthday,person.eye_color, person.hair_color,
+                       person.nationality,
                        person.location_id,location.x,location.y,location.z,location.name
                 FROM person 
                 LEFT JOIN coordinates ON person.coordinates_id = coordinates.id 
@@ -443,12 +447,13 @@ class PersonDao: AbstractDao() {
             eyeColor = Color.valueOf(resultSet.getString(9)),
             hairColor = if (resultSet.getString(10) == null) null else Color.valueOf(resultSet.getString(10)),
             location = Location(
-                id = resultSet.getLong(11),
-                x = resultSet.getLong(12),
-                y = resultSet.getFloat(13),
-                z = resultSet.getFloat(14),
-                name = resultSet.getString(15)
-            )
+                id = resultSet.getLong(12),
+                x = resultSet.getLong(13),
+                y = resultSet.getFloat(14),
+                z = resultSet.getFloat(15),
+                name = resultSet.getString(16)
+            ),
+            nationality = resultSet.getString(11)
         )
     }
 }

@@ -1,15 +1,29 @@
-package ru.yofik.soa.collection.domain.filterClaim
+package ru.yofik.soa.common.domain.filterClaim
 
-import com.google.gson.GsonBuilder
-import com.google.gson.JsonDeserializationContext
-import com.google.gson.JsonDeserializer
-import com.google.gson.JsonElement
-import com.google.gson.JsonObject
+import com.google.gson.*
 import java.lang.NumberFormatException
 import java.lang.reflect.Type
 import java.nio.charset.StandardCharsets
 import java.util.Base64
-import javax.ejb.Stateless
+
+fun createFromFilterClaims(filters: List<FilterClaim>): MutableList<String> {
+    return filters.map {
+        Base64.getEncoder().encodeToString(
+            Gson().toJson(it).toByteArray(StandardCharsets.UTF_8)
+        )
+    }.toMutableList()
+}
+
+fun createFromBase64(filters: List<String>): List<FilterClaim> {
+    return filters.map {
+        String(Base64.getDecoder().decode(it), StandardCharsets.UTF_8)
+    }.map {
+        GsonBuilder()
+            .registerTypeAdapter(FilterClaim::class.java, FilterClaimGsonDeserializer())
+            .create()
+            .fromJson(it, FilterClaim::class.java)
+    }
+}
 
 class FilterClaimGsonDeserializer: JsonDeserializer<FilterClaim> {
     override fun deserialize(json: JsonElement?, typeOfT: Type?, context: JsonDeserializationContext?): FilterClaim {
@@ -70,20 +84,5 @@ class FilterClaimGsonDeserializer: JsonDeserializer<FilterClaim> {
         }
 
         throw FilterClaimFormatException("Unsupported type of FilterClaim's filter field")
-    }
-}
-
-@Stateless
-class FilterClaimFactory {
-    private val gson = GsonBuilder()
-        .registerTypeAdapter(FilterClaim::class.java, FilterClaimGsonDeserializer())
-        .create()
-
-    fun createFromBase64(filters: List<String>): List<FilterClaim> {
-        return filters.map {
-            String(Base64.getDecoder().decode(it), StandardCharsets.UTF_8)
-        }.map {
-            gson.fromJson(it, FilterClaim::class.java)
-        }
     }
 }

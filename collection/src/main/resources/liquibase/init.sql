@@ -24,5 +24,6 @@ CREATE TABLE person
     birthday       TIMESTAMP                                            NOT NULL,
     eye_color      VARCHAR(15)                                          NOT NULL,
     hair_color     VARCHAR(15),
-    location_id    BIGINT REFERENCES location (id) ON DELETE CASCADE    NOT NULL
+    location_id    BIGINT REFERENCES location (id) ON DELETE CASCADE    NOT NULL,
+    nationality    VARCHAR(255)                                         NOT NULL
 );

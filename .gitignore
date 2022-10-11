@@ -3,5 +3,6 @@
 /build/
 /collection/build/
 /demography/build/
+/common/build/
 *.iml
 /deployments/

@@ -1,4 +1,4 @@
-package ru.yofik.soa.collection.domain.filterClaim
+package ru.yofik.soa.common.domain.filterClaim
 
 class FilterClaimFormatException(
     message: String

@@ -1,4 +1,4 @@
-package ru.yofik.soa.collection.api
+package ru.yofik.soa.demography.api
 
 import ru.yofik.soa.common.BadRequestResponse
 import ru.yofik.soa.common.InvalidDataException

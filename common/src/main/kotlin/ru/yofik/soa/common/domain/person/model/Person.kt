@@ -1,8 +1,8 @@
-package ru.yofik.soa.collection.domain.person.model
+package ru.yofik.soa.common.domain.person.model
 
-import ru.yofik.soa.collection.utils.ColorJaxbAdapter
-import ru.yofik.soa.collection.utils.LocalDateJaxbAdapter
-import ru.yofik.soa.collection.utils.LocalDateTimeJaxbAdapter
+import ru.yofik.soa.common.utils.ColorJaxbAdapter
+import ru.yofik.soa.common.utils.LocalDateJaxbAdapter
+import ru.yofik.soa.common.utils.LocalDateTimeJaxbAdapter
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -27,6 +27,7 @@ class Person {
     @XmlJavaTypeAdapter(value = ColorJaxbAdapter::class)
     var hairColor: Color?
     var location: Location
+    var nationality: String
 
     constructor(
         id: Int,
@@ -38,6 +39,7 @@ class Person {
         eyeColor: Color,
         hairColor: Color?,
         location: Location,
+        nationality: String
     ) {
         this.id = id
         this.name = name
@@ -48,6 +50,7 @@ class Person {
         this.eyeColor = eyeColor
         this.hairColor = hairColor
         this.location = location
+        this.nationality = nationality
     }
 
     constructor(): this(
@@ -59,7 +62,8 @@ class Person {
         birthday = LocalDateTime.now(ZoneId.of("UTC")),
         eyeColor = Color.GREEN,
         hairColor = null,
-        location = Location()
+        location = Location(),
+        nationality = ""
     )
 }
 

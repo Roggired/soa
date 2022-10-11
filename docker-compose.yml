@@ -17,6 +17,7 @@ services:
       - SOA_DB=jdbc:postgresql://172.18.0.2:5432/soa
       - SOA_USER=soa
       - SOA_PASSWORD=soa
+      - SOA_COLLECTION_URL=http://172.18.0.3:8080/collection/
     networks:
       soa:
         ipv4_address: 172.18.0.3

@@ -1,6 +1,6 @@
 package ru.yofik.soa.collection.api.person
 
-import ru.yofik.soa.collection.domain.person.model.Color
+import ru.yofik.soa.common.domain.person.model.Color
 import java.time.LocalDateTime
 
 data class PersonRequest(

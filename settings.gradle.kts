@@ -1,6 +1,7 @@
 rootProject.name = "soa"
 include("collection")
 include("demography")
+include("common")
 
 pluginManagement {
     val kotlinVersion: String by settings

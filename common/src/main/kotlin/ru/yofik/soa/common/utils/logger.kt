@@ -1,4 +1,4 @@
-package ru.yofik.soa.collection.utils
+package ru.yofik.soa.common.utils
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

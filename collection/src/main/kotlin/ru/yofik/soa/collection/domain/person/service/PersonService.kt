@@ -1,14 +1,14 @@
 package ru.yofik.soa.collection.domain.person.service
 
-import ru.yofik.soa.collection.api.NotFoundException
+import ru.yofik.soa.common.NotFoundException
 import ru.yofik.soa.collection.api.PageRequest
-import ru.yofik.soa.collection.domain.Page
-import ru.yofik.soa.collection.domain.filterClaim.*
+import ru.yofik.soa.common.Page
 import ru.yofik.soa.collection.domain.person.dao.PersonDao
-import ru.yofik.soa.collection.domain.person.model.Coordinates
-import ru.yofik.soa.collection.domain.person.model.Location
-import ru.yofik.soa.collection.domain.person.model.Person
+import ru.yofik.soa.common.domain.person.model.Coordinates
+import ru.yofik.soa.common.domain.person.model.Location
+import ru.yofik.soa.common.domain.person.model.Person
 import ru.yofik.soa.collection.domain.person.model.validate
+import ru.yofik.soa.common.domain.filterClaim.*
 import java.time.LocalDate
 import java.time.ZoneId
 import javax.enterprise.context.ApplicationScoped
@@ -18,12 +18,6 @@ import javax.inject.Inject
 class PersonService {
     @Inject
     var personDao: PersonDao? = null
-
-    @Inject
-    var filterClaimFactory: FilterClaimFactory? = null
-
-    @Inject
-    var filterClaimProtector: FilterClaimProtector? = null
 
     fun create(personDto: Person): Person {
         val person = Person(
@@ -45,7 +39,8 @@ class PersonService {
                 y = personDto.location.y,
                 z = personDto.location.z,
                 name = personDto.location.name
-            )
+            ),
+            nationality = personDto.nationality
         )
         person.validate()
 
@@ -62,6 +57,7 @@ class PersonService {
             birthday = personDto.birthday
             eyeColor = personDto.eyeColor
             hairColor = personDto.hairColor
+            nationality = personDto.nationality
             location.x = personDto.location.x
             location.y = personDto.location.y
             location.z = personDto.location.z
@@ -95,8 +91,8 @@ class PersonService {
     }
 
     private fun convertToClaims(filters: List<String>): List<FilterClaim> {
-        return filterClaimProtector!!.protectFilterClaims(
-            filterClaimFactory!!.createFromBase64(filters)
+        return protectFilterClaims(
+            createFromBase64(filters)
         )
     }
 
@@ -114,6 +110,7 @@ class PersonService {
                     FilterableProperties.PERSON_BIRTHDAY -> (it.property.column to ">=") to it.filter!!
                     FilterableProperties.PERSON_EYE_COLOR -> (it.property.column to "=") to it.filter!!
                     FilterableProperties.PERSON_HAIR_COLOR -> (it.property.column to "=") to it.filter!!
+                    FilterableProperties.PERSON_NATIONALITY -> (it.property.column to "LIKE") to it.filter!!
                     FilterableProperties.LOCATION_X -> (it.property.column to "=") to it.filter!!
                     FilterableProperties.LOCATION_Y -> (it.property.column to "=") to it.filter!!
                     FilterableProperties.LOCATION_Z -> (it.property.column to "=") to it.filter!!

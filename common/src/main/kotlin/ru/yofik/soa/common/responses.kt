@@ -1,10 +1,9 @@
-package ru.yofik.soa.collection.api
+package ru.yofik.soa.common
 
-import ru.yofik.soa.collection.domain.Page
-import ru.yofik.soa.collection.domain.person.model.Color
-import ru.yofik.soa.collection.domain.person.model.Coordinates
-import ru.yofik.soa.collection.domain.person.model.Location
-import ru.yofik.soa.collection.domain.person.model.Person
+import ru.yofik.soa.common.domain.person.model.Color
+import ru.yofik.soa.common.domain.person.model.Coordinates
+import ru.yofik.soa.common.domain.person.model.Location
+import ru.yofik.soa.common.domain.person.model.Person
 import javax.xml.bind.annotation.XmlAccessType
 import javax.xml.bind.annotation.XmlAccessorType
 import javax.xml.bind.annotation.XmlRootElement
