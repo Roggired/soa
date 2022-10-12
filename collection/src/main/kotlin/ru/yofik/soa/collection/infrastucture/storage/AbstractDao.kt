@@ -8,7 +8,7 @@ const val DB_USER_ENV = "SOA_USER"
 const val DB_PASSWORD_ENV = "SOA_PASSWORD"
 
 abstract class AbstractDao {
-    protected fun getConnection(): Connection {
+    open fun getConnection(): Connection {
         return DriverManager.getConnection(
             getDbUrl(),
             getDbUser(),

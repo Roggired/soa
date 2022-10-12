@@ -1,18 +1,85 @@
 package ru.yofik.soa.collection.domain.person.dao
 
-import ru.yofik.soa.collection.domain.person.model.Color
-import ru.yofik.soa.collection.domain.person.model.Coordinates
-import ru.yofik.soa.collection.domain.person.model.Location
-import ru.yofik.soa.collection.domain.person.model.Person
+import ru.yofik.soa.common.Page
 import ru.yofik.soa.collection.infrastucture.storage.AbstractDao
-import java.lang.IllegalArgumentException
+import ru.yofik.soa.common.domain.person.model.Color
+import ru.yofik.soa.common.domain.person.model.Coordinates
+import ru.yofik.soa.common.domain.person.model.Location
+import ru.yofik.soa.common.domain.person.model.Person
 import java.sql.Connection
+import java.sql.ResultSet
 import java.sql.SQLException
 import java.sql.Timestamp
-import javax.ejb.Stateless
+import javax.enterprise.context.ApplicationScoped
 
-@Stateless
+@ApplicationScoped
 class PersonDao: AbstractDao() {
+    fun getByName(namePrefix: String): List<Person> {
+        val connection = getConnection()
+
+        val preparedStatement = connection.prepareStatement(
+            """
+                SELECT person.id,person.name,
+                       person.coordinates_id,coordinates.x,coordinates.y,
+                       person.creation_date,person.height,person.birthday,person.eye_color, person.hair_color,
+                       person.nationality,
+                       person.location_id,location.x,location.y,location.z,location.name
+                FROM person 
+                LEFT JOIN coordinates ON person.coordinates_id = coordinates.id 
+                LEFT JOIN location ON person.location_id = location.id 
+                WHERE person.name LIKE ? || '%'
+            """.trimIndent()
+        ).apply {
+            setString(1, namePrefix)
+        }
+        val resultSet = preparedStatement.executeQuery()
+        val result = mutableListOf<Person>()
+
+        while (resultSet.next()) {
+            result.add(extractPersonFromResultSet(resultSet))
+        }
+
+        connection.close()
+
+        return result
+    }
+
+    fun getMeanHeight(): Double {
+        val connection = getConnection()
+
+        val preparedStatement = connection.prepareStatement(
+            """
+                SELECT AVG(person.height) FROM person                  
+            """.trimIndent()
+        )
+        val resultSet = preparedStatement.executeQuery()
+        resultSet.next()
+        val result = resultSet.getDouble(1)
+
+        connection.close()
+
+        return result
+    }
+
+    fun getAmountUnderHeight(targetHeight: Int): Int {
+        val connection = getConnection()
+
+        val preparedStatement = connection.prepareStatement(
+            """
+                SELECT COUNT(*) FROM person WHERE height < ?                 
+            """.trimIndent()
+        ).apply {
+            setInt(1, targetHeight)
+        }
+        val resultSet = preparedStatement.executeQuery()
+        resultSet.next()
+        val result = resultSet.getInt(1)
+
+        connection.close()
+
+        return result
+    }
+
     fun create(person: Person): Person {
         val connection = getConnection()
         connection.autoCommit = false
@@ -45,8 +112,8 @@ class PersonDao: AbstractDao() {
         coordinatesId: Long
     ): Int {
         val preparedStatement = connection.prepareStatement(
-            "INSERT INTO person(name, coordinates_id, creation_date, height, birthday, eye_color, hair_color, location_id) " +
-                    "VALUES(?, ?, ?, ?, ?, ?, ?, ?) RETURNING id"
+            "INSERT INTO person(name, coordinates_id, creation_date, height, birthday, eye_color, hair_color, location_id, nationality) " +
+                    "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id"
         ).apply {
             setString(1, person.name)
             setLong(2, coordinatesId)
@@ -56,6 +123,7 @@ class PersonDao: AbstractDao() {
             setString(6, person.eyeColor.toString())
             setString(7, person.hairColor?.toString())
             setLong(8, locationId)
+            setString(9, person.nationality)
         }
 
         val resultSet = preparedStatement.executeQuery()
@@ -114,7 +182,7 @@ class PersonDao: AbstractDao() {
 
     private fun updatePerson(connection: Connection, person: Person) {
         val preparedStatement = connection.prepareStatement(
-            "UPDATE person SET name=?,creation_date=?,height=?,birthday=?,eye_color=?,hair_color=? WHERE id=?"
+            "UPDATE person SET name=?,creation_date=?,height=?,birthday=?,eye_color=?,hair_color=?,nationality=? WHERE id=?"
         ).apply {
             setString(1, person.name)
             setTimestamp(2, Timestamp.valueOf(person.creationDate.atTime(0, 0)))
@@ -122,7 +190,8 @@ class PersonDao: AbstractDao() {
             setTimestamp(4, Timestamp.valueOf(person.birthday))
             setString(5, person.eyeColor.toString())
             setString(6, person.hairColor?.toString())
-            setInt(7, person.id)
+            setString(7, person.nationality)
+            setInt(8, person.id)
         }
         preparedStatement.executeUpdate()
     }
@@ -204,7 +273,8 @@ class PersonDao: AbstractDao() {
             """
                 SELECT person.id,person.name,
                        person.coordinates_id,coordinates.x,coordinates.y,
-                       persion.creation_date,person.height,person.birthday,person.eye_color, person.hair_color,
+                       person.creation_date,person.height,person.birthday,person.eye_color, person.hair_color,
+                       person.nationality,
                        person.location_id,location.x,location.y,location.z,location.name
                 FROM person 
                 LEFT JOIN coordinates ON person.coordinates_id = coordinates.id 
@@ -220,7 +290,150 @@ class PersonDao: AbstractDao() {
             return null
         }
 
-        val person = Person(
+        val person = extractPersonFromResultSet(resultSet)
+
+        connection.close()
+
+        return person
+    }
+
+    fun getByFilters(
+        filters: Map<Pair<String, String>, Any>,
+        sort: Collection<String>,
+        pageSize: Int,
+        pageIndex: Int
+    ): Page<Person> {
+        val connection = getConnection()
+
+        val countPreparedStatement = connection.prepareStatement(
+            constructCountQuery(filters)
+        )
+        countPreparedStatement.apply {
+            var index = 1
+            for (entry in filters.entries) {
+                countPreparedStatement.setObject(index++, entry.value)
+            }
+        }
+
+        val countResultSet = countPreparedStatement.executeQuery()
+        countResultSet.next()
+        val elementsTotal = countResultSet.getInt(1)
+
+        val preparedStatement = connection.prepareStatement(
+            constructSelectQuery(
+                filters,
+                sort,
+                pageSize,
+                pageIndex
+            )
+        )
+        preparedStatement.apply {
+            var index = 1
+            for (entry in filters.entries) {
+                preparedStatement.setObject(index++, entry.value)
+            }
+        }
+
+        val page: Page<Person>
+        val resultSet = preparedStatement.executeQuery()
+        if (!resultSet.next()) {
+            return Page(
+                pageSize = pageSize,
+                pageIndex = pageIndex,
+                elementsTotal = 0,
+                pagesTotal = 0,
+                content = mutableListOf()
+            )
+        }
+
+        val pagesTotal = if (elementsTotal % pageSize == 0) elementsTotal / pageSize else elementsTotal / pageSize + 1
+        val payload = mutableListOf<Person>()
+
+        while (true) {
+            payload.add(extractPersonFromResultSet(resultSet))
+
+            if (!resultSet.next()) break
+        }
+
+        page = Page(
+            pageSize = pageSize,
+            pageIndex = pageIndex,
+            elementsTotal = elementsTotal,
+            pagesTotal = pagesTotal,
+            content = payload
+        )
+
+        connection.close()
+
+        return page
+    }
+
+    private fun constructSelectQuery(
+        filters: Map<Pair<String, String>, Any>,
+        sort: Collection<String>,
+        pageSize: Int,
+        pageIndex: Int
+    ): String {
+        var sql = """
+                SELECT person.id,person.name,
+                       person.coordinates_id,coordinates.x,coordinates.y,
+                       person.creation_date,person.height,person.birthday,person.eye_color, person.hair_color,
+                       person.nationality,
+                       person.location_id,location.x,location.y,location.z,location.name
+                FROM person 
+                LEFT JOIN coordinates ON person.coordinates_id = coordinates.id 
+                LEFT JOIN location ON person.location_id = location.id 
+            """.trimIndent()
+        if (filters.isNotEmpty()) {
+            sql += " WHERE "
+            val whereClauses = filters.map { (pair, _) ->
+                if (pair.second.lowercase() == "like") {
+                    "${pair.first} LIKE ? || '%'"
+                } else {
+                    "${pair.first} ${pair.second} ?"
+                }
+            }
+            sql += whereClauses.joinToString(separator = " AND ")
+        }
+
+        if (sort.isEmpty()) {
+            sql += " ORDER BY person.id "
+        } else {
+            sql += " ORDER BY "
+            sql += sort.joinToString(separator = ",")
+        }
+
+        sql += " LIMIT $pageSize OFFSET ${pageIndex * pageSize}"
+
+        return sql
+    }
+
+    private fun constructCountQuery(
+        filters: Map<Pair<String, String>, Any>,
+    ): String {
+        var sql = """
+                SELECT COUNT(*)
+                FROM person 
+                LEFT JOIN coordinates ON person.coordinates_id = coordinates.id 
+                LEFT JOIN location ON person.location_id = location.id 
+            """.trimIndent()
+        if (filters.isNotEmpty()) {
+            sql += " WHERE "
+            val whereClauses = filters.map { (pair, _) ->
+                if (pair.second.lowercase() == "like") {
+                    "${pair.first} LIKE ? || '%'"
+                } else {
+                    "${pair.first} ${pair.second} ?"
+                }
+            }
+            sql += whereClauses.joinToString(separator = " AND ")
+        }
+
+        return sql
+    }
+
+    private fun extractPersonFromResultSet(resultSet: ResultSet): Person {
+        return Person(
             id = resultSet.getInt(1),
             name = resultSet.getString(2),
             coordinates = Coordinates(
@@ -234,16 +447,13 @@ class PersonDao: AbstractDao() {
             eyeColor = Color.valueOf(resultSet.getString(9)),
             hairColor = if (resultSet.getString(10) == null) null else Color.valueOf(resultSet.getString(10)),
             location = Location(
-                id = resultSet.getLong(11),
-                x = resultSet.getLong(12),
-                y = resultSet.getFloat(13),
-                z = resultSet.getFloat(14),
-                name = resultSet.getString(15)
-            )
+                id = resultSet.getLong(12),
+                x = resultSet.getLong(13),
+                y = resultSet.getFloat(14),
+                z = resultSet.getFloat(15),
+                name = resultSet.getString(16)
+            ),
+            nationality = resultSet.getString(11)
         )
-
-        connection.close()
-
-        return person
     }
 }

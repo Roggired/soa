@@ -1,6 +1,9 @@
 package ru.yofik.soa.collection.domain.person.model
 
-import ru.yofik.soa.collection.api.InvalidDataException
+import ru.yofik.soa.common.InvalidDataException
+import ru.yofik.soa.common.domain.person.model.Coordinates
+import ru.yofik.soa.common.domain.person.model.Location
+import ru.yofik.soa.common.domain.person.model.Person
 
 fun Person.validate() {
     if (name.isBlank()) {

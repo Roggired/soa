@@ -13,7 +13,6 @@ import javax.ws.rs.core.MediaType
 class HelloWorld {
     @GET
     fun hello(): String {
-        AbstractDao().getConnection()
         return "<hello>Hello, World! Collection</hello>"
     }
 }
