@@ -1,7 +1,6 @@
 export { Icon } from './Icon'
 export { Dropdown } from './Dropdown'
 export * as Materialize from './material-wrappers'
-export { FormTextField } from './FormTextField'
 export * from './Button'
 export { Loader } from './Loader'
 export { RadioButton } from './RadioButton'

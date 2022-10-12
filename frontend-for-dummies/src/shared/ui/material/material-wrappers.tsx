@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 export const Row = styled.div.attrs((props) => ({
+    // @ts-ignore
     className: addClassname(props.className, 'row'),
 }))``
 
@@ -14,11 +15,13 @@ type ColProps = {
 
 export const Col = styled.div.attrs<ColProps>((props) => ({
     className: addClassname(
+        // @ts-ignore
         props.className,
         generateClassname(props.s, props.m, props.l, props.xl),
     ),
 }))<ColProps>``
 
+// @ts-ignore
 const generateClassname = (s, m, l, xl): string => {
     let className = 'col'
 

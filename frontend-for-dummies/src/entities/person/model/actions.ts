@@ -1,77 +1,156 @@
 import {
-    GET_ALL_LABS,
-    GET_ALL_LABS_SUCCESS,
-    GET_ALL_LABS_WITH_TEXT,
-    GET_ALL_LABS_WITH_TEXT_FAILURE,
-    GET_ALL_LABS_WITH_TEXT_REQUEST,
-    GET_ALL_LABS_WITH_TEXT_SUCCESS,
-    GET_LAB_MD,
-    GET_LAB_MD_FAILURE,
-    GET_LAB_MD_REQUEST,
-    GET_LAB_MD_SUCCESS,
-    GetAllLabsAction,
-    GetAllLabsSuccessAction,
-    GetAllLabsWithTextAction,
-    GetAllLabsWithTextFailureAction,
-    GetAllLabsWithTextRequestAction,
-    GetAllLabsWithTextSuccessAction,
-    GetLabMDAction,
-    GetLabMDFailureAction,
-    GetLabMDRequestAction,
-    GetLabMDSuccessAction,
-} from '@entities/lab/model/actionTypes'
-import {
     createActionWithDoubleArgs,
     createActionWithNoArgs,
     createActionWithSingleArg,
     createFailureAction,
-} from '@shared/lib/state/actionCreators'
-import { Lab } from '@entities/lab/lib'
+} from '../../../shared/lib/state/actionCreators'
+import { Person } from '../lib'
+import {
+    CREATE_PERSON,
+    CREATE_PERSON_FAILURE,
+    CREATE_PERSON_REQUEST,
+    CREATE_PERSON_SUCCESS,
+    CreatePersonAction,
+    CreatePersonFailureAction,
+    CreatePersonRequestAction,
+    CreatePersonSuccessAction,
+    DELETE_PERSON,
+    DELETE_PERSON_FAILURE,
+    DELETE_PERSON_REQUEST,
+    DELETE_PERSON_SUCCESS,
+    DeletePersonAction,
+    DeletePersonFailureAction,
+    DeletePersonRequestAction,
+    DeletePersonSuccessAction,
+    GET_DEFINITE_PERSON,
+    GET_DEFINITE_PERSON_FAILURE,
+    GET_DEFINITE_PERSON_REQUEST,
+    GET_DEFINITE_PERSON_SUCCESS,
+    GET_PERSONS,
+    GET_PERSONS_FAILURE,
+    GET_PERSONS_REQUEST,
+    GET_PERSONS_SUCCESS,
+    GetDefinitePersonAction,
+    GetDefinitePersonFailureAction,
+    GetDefinitePersonRequestAction,
+    GetDefinitePersonSuccessAction,
+    GetPersonsAction,
+    GetPersonsFailureAction,
+    GetPersonsRequestAction,
+    GetPersonsSuccessAction,
+    UPDATE_PERSON,
+    UPDATE_PERSON_FAILURE,
+    UPDATE_PERSON_REQUEST,
+    UPDATE_PERSON_SUCCESS,
+    UpdatePersonAction,
+    UpdatePersonFailureAction,
+    UpdatePersonRequestAction,
+    UpdatePersonSuccessAction,
+} from './actionTypes'
 
-export const getAllLabs = createActionWithNoArgs<GetAllLabsAction>(GET_ALL_LABS)
+export const createPerson = createActionWithSingleArg<
+    CreatePersonAction,
+    Person
+>(CREATE_PERSON, 'person')
 
-export const getAllLabsSuccess = createActionWithSingleArg<
-    GetAllLabsSuccessAction,
-    Lab[]
->(GET_ALL_LABS_SUCCESS, 'labs')
+export const createPersonRequest =
+    createActionWithNoArgs<CreatePersonRequestAction>(CREATE_PERSON_REQUEST)
+
+export const createPersonSuccess = createActionWithSingleArg<
+    CreatePersonSuccessAction,
+    Person
+>(CREATE_PERSON_SUCCESS, 'person')
+
+export const createPersonFailure =
+    createFailureAction<CreatePersonFailureAction>(CREATE_PERSON_FAILURE)
 
 // =============================================================================
 
-export const getLabMD = createActionWithSingleArg<GetLabMDAction, number>(
-    GET_LAB_MD,
-    'id',
+export const deletePerson = createActionWithSingleArg<
+    DeletePersonAction,
+    number
+>(DELETE_PERSON, 'number')
+
+export const deletePersonRequest =
+    createActionWithNoArgs<DeletePersonRequestAction>(DELETE_PERSON_REQUEST)
+
+export const deletePersonSuccess = createActionWithSingleArg<
+    DeletePersonSuccessAction,
+    number
+>(DELETE_PERSON_SUCCESS, 'number')
+
+export const deletePersonFailure =
+    createFailureAction<DeletePersonFailureAction>(DELETE_PERSON_FAILURE)
+
+// =============================================================================
+
+export const updatePerson = createActionWithSingleArg<
+    UpdatePersonAction,
+    Person
+>(UPDATE_PERSON, 'person')
+
+export const updatePersonRequest =
+    createActionWithNoArgs<UpdatePersonRequestAction>(UPDATE_PERSON_REQUEST)
+
+export const updatePersonSuccess = createActionWithSingleArg<
+    UpdatePersonSuccessAction,
+    Person
+>(UPDATE_PERSON_SUCCESS, 'person')
+
+export const updatePersonFailure =
+    createFailureAction<UpdatePersonFailureAction>(UPDATE_PERSON_FAILURE)
+
+// =============================================================================
+
+export const getDefinitePerson = createActionWithSingleArg<
+    GetDefinitePersonAction,
+    number
+>(GET_DEFINITE_PERSON, 'number')
+
+export const getDefinitePersonRequest =
+    createActionWithNoArgs<GetDefinitePersonRequestAction>(
+        GET_DEFINITE_PERSON_REQUEST,
+    )
+
+export const getDefinitePersonSuccess = createActionWithSingleArg<
+    GetDefinitePersonSuccessAction,
+    Person
+>(GET_DEFINITE_PERSON_SUCCESS, 'person')
+
+export const getDefinitePersonFailure =
+    createFailureAction<GetDefinitePersonFailureAction>(
+        GET_DEFINITE_PERSON_FAILURE,
+    )
+
+// =============================================================================
+
+export const getPersons = createActionWithDoubleArgs<GetPersonsAction, number>(
+    GET_PERSONS,
+    'pageSize',
+    'pageIndex',
 )
 
-export const getLabMDRequest =
-    createActionWithNoArgs<GetLabMDRequestAction>(GET_LAB_MD_REQUEST)
+export const getPersonsRequest =
+    createActionWithNoArgs<GetPersonsRequestAction>(GET_PERSONS_REQUEST)
 
-export const getLabMDSuccess = createActionWithDoubleArgs<
-    GetLabMDSuccessAction,
-    number,
-    string
->(GET_LAB_MD_SUCCESS, 'id', 'text')
+export const getPersonsSuccess = (
+    persons: Person[],
+    pageSize: number,
+    pageIndex: number,
+    elementsTotal: number,
+    pagesTotal: number,
+): GetPersonsSuccessAction => ({
+    type: GET_PERSONS_SUCCESS,
+    payload: {
+        pageIndex,
+        pageSize,
+        pagesTotal,
+        elementsTotal,
+        persons,
+    },
+})
 
-export const getLabMDFailure =
-    createFailureAction<GetLabMDFailureAction>(GET_LAB_MD_FAILURE)
-
-// =============================================================================
-
-export const getAllLabsWithText =
-    createActionWithNoArgs<GetAllLabsWithTextAction>(GET_ALL_LABS_WITH_TEXT)
-
-export const getAllLabsWithTextRequest =
-    createActionWithNoArgs<GetAllLabsWithTextRequestAction>(
-        GET_ALL_LABS_WITH_TEXT_REQUEST,
-    )
-
-export const getAllLabsWithTextSuccess =
-    createActionWithNoArgs<GetAllLabsWithTextSuccessAction>(
-        GET_ALL_LABS_WITH_TEXT_SUCCESS,
-    )
-
-export const getAllLabsWithTextFailure =
-    createFailureAction<GetAllLabsWithTextFailureAction>(
-        GET_ALL_LABS_WITH_TEXT_FAILURE,
-    )
+export const getPersonsFailure =
+    createFailureAction<GetPersonsFailureAction>(GET_PERSONS_FAILURE)
 
 // =============================================================================

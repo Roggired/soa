@@ -1,5 +1,5 @@
-import { AppState } from '@app/store/reducers'
+import { AppState } from '../../../app/store/reducers'
 
-export const all = (state: AppState) => state.labs
+export const all = (state: AppState) => state.person
 
-export const labs = (state: AppState) => all(state).labs
+export const persons = (state: AppState) => all(state).persons

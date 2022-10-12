@@ -1,12 +1,14 @@
 import { applyMiddleware, compose, createStore, Store } from 'redux'
 import createSagaMiddleware from 'redux-saga'
+import { personModel } from '../../entities/person'
 import { createMiddlewares } from './middlewares'
 import { AppState, rootReducer } from './reducers'
 import { createRootSaga } from './sagas'
-import { adminModel } from '@entities/user/admin'
 
 const initState: AppState = {
-    admin: adminModel.initialState,
+    person: personModel.initialState,
+    loading: {},
+    error: {},
 }
 
 export const configureStore = (

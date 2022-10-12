@@ -36,7 +36,7 @@ type DeprecatedButtonProps = {
     readonly styleType?: StyleType
     readonly width?: string
     readonly className?: string
-    readonly children: JSX.Element
+    readonly children: string
 }
 
 export const DeprecatedButton: FunctionComponent<DeprecatedButtonProps> = ({
@@ -110,6 +110,7 @@ export const DeprecatedButtonWithLoading: FC<
 > = ({ isLoading, children, ...buttonProps }) => {
     return (
         <DeprecatedButton {...buttonProps}>
+            {/*// @ts-ignore*/}
             {isLoading ? <Loader type={'button'} /> : children}
         </DeprecatedButton>
     )

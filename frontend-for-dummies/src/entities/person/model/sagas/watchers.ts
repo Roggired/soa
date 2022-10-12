@@ -1,22 +1,16 @@
 import { takeLatest } from 'redux-saga/effects'
-import {
-    GET_ALL_LABS_WITH_TEXT,
-    GetAllLabsAction,
-} from '@entities/lab/model/actionTypes'
-import { sagaTemplates } from '@shared/api'
-import {
-    getAllLabsWithTextFailure,
-    getAllLabsWithTextRequest,
-} from '@entities/lab/model/actions'
-import { handleGetAllLabsWithText } from '@entities/lab/model/sagas/workers/getAllLabsWithText'
+import { sagaTemplates } from '../../../../shared/api'
+import { getPersonsFailure, getPersonsRequest } from '../actions'
+import { GET_PERSONS, GetPersonsAction } from '../actionTypes'
+import { handleGetPersons } from './workers/getAllLabs'
 
-export function* watchGetAllLabsWithText() {
+export function* watchGetPersons() {
     yield takeLatest(
-        GET_ALL_LABS_WITH_TEXT,
-        sagaTemplates.withErrorHandlingAndLoading<GetAllLabsAction>(
-            handleGetAllLabsWithText,
-            getAllLabsWithTextRequest,
-            getAllLabsWithTextFailure,
+        GET_PERSONS,
+        sagaTemplates.withErrorHandlingAndLoading<GetPersonsAction>(
+            handleGetPersons,
+            getPersonsRequest,
+            getPersonsFailure,
         ),
     )
 }

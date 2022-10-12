@@ -1,6 +1,6 @@
 import { all, fork } from 'redux-saga/effects'
-import { watchGetAllLabsWithText } from '@entities/lab/model/sagas/watchers'
+import { watchGetPersons } from './watchers'
 
 export function* rootSaga() {
-    yield all([fork(watchGetAllLabsWithText)])
+    yield all([fork(watchGetPersons)])
 }

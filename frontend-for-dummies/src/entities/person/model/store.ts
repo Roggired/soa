@@ -1,47 +1,39 @@
-import { Lab } from '@entities/lab/lib/interfaces'
+import { Person } from '../lib'
 import {
-    GET_ALL_LABS_SUCCESS,
-    GET_LAB_MD_SUCCESS,
-    LabActions,
-} from '@entities/lab/model/actionTypes'
+    CREATE_PERSON_SUCCESS,
+    GET_PERSONS_SUCCESS,
+    PersonActions,
+} from './actionTypes'
 
-export interface LabState {
-    labs: Lab[]
+export interface PersonsState {
+    persons: Person[]
+    currentPage: number
+    pageSize: number
+    elementsSize: number | null
+    pagesTotal: number | null
 }
 
-export const initialState: LabState = {
-    labs: [],
+export const initialState: PersonsState = {
+    persons: [],
+    currentPage: 0,
+    pageSize: 10,
+    elementsSize: null,
+    pagesTotal: null,
 }
 
 export const reducer = (
-    state: LabState = initialState,
-    action: LabActions,
-): LabState => {
+    state: PersonsState = initialState,
+    action: PersonActions,
+): PersonsState => {
     switch (action.type) {
-        case GET_ALL_LABS_SUCCESS:
+        case GET_PERSONS_SUCCESS:
             return {
                 ...state,
-                labs: action.payload.labs.map(
-                    (lab) =>
-                        <Lab>{
-                            ...lab,
-                            text: null,
-                        },
-                ),
-            }
-        case GET_LAB_MD_SUCCESS:
-            return {
-                ...state,
-                labs: state.labs.map((lab) => {
-                    if (lab.id === action.payload.id) {
-                        return <Lab>{
-                            ...lab,
-                            text: action.payload.text,
-                        }
-                    } else {
-                        return lab
-                    }
-                }),
+                persons: [...state.persons, ...action.payload.persons],
+                currentPage: action.payload.pageIndex,
+                pageSize: action.payload.persons.length,
+                elementsSize: action.payload.elementsTotal,
+                pagesTotal: action.payload.pagesTotal,
             }
         default:
             return state
