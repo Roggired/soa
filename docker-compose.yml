@@ -11,6 +11,8 @@ services:
   server:
 #    image: quay.io/wildfly/wildfly
     build: .
+    ports:
+      - "20000:8080"
     volumes:
       - ./deployments:/opt/jboss/wildfly/standalone/deployments
     environment:
