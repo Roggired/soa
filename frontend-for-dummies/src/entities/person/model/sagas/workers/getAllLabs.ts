@@ -1,6 +1,5 @@
 import { AxiosResponse } from 'axios'
-import { act } from 'react-dom/test-utils'
-import { call, cps, put } from 'redux-saga/effects'
+import { call, put } from 'redux-saga/effects'
 import { apiCaller } from '../../../../../shared/api'
 import { ROOT } from '../../../../../shared/lib/routing/routes'
 import { successToast } from '../../../../../shared/lib/toasts'
@@ -16,7 +15,6 @@ import {
     GetPersonsAction,
     UpdatePersonAction,
 } from '../../actionTypes'
-import { Builder, parseString } from 'xml2js'
 import { XMLBuilder, XMLParser } from 'fast-xml-parser'
 import { Color, Person } from '../../../lib'
 
@@ -30,7 +28,7 @@ export function* handleGetPersons(action: GetPersonsAction) {
     })
 
     const result = parser.parse(response.data)
-    const payload = result.responsePage.payload
+    const payload = result.ResponsePage.payload
     console.log(parser.parse(response.data))
 
     let persons: Person[]

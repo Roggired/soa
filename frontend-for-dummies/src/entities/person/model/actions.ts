@@ -6,18 +6,22 @@ import {
 } from '../../../shared/lib/state/actionCreators'
 import { Person } from '../lib'
 import {
+    CREATE_CLAIM,
     CREATE_PERSON,
     CREATE_PERSON_FAILURE,
     CREATE_PERSON_REQUEST,
     CREATE_PERSON_SUCCESS,
+    CreateClaimAction,
     CreatePersonAction,
     CreatePersonFailureAction,
     CreatePersonRequestAction,
     CreatePersonSuccessAction,
+    DELETE_CLAIM,
     DELETE_PERSON,
     DELETE_PERSON_FAILURE,
     DELETE_PERSON_REQUEST,
     DELETE_PERSON_SUCCESS,
+    DeleteClaimAction,
     DeletePersonAction,
     DeletePersonFailureAction,
     DeletePersonRequestAction,
@@ -47,6 +51,7 @@ import {
     UpdatePersonRequestAction,
     UpdatePersonSuccessAction,
 } from './actionTypes'
+import { FilterClaim } from './store'
 
 export const createPerson = createActionWithDoubleArgs<
     CreatePersonAction,
@@ -151,3 +156,13 @@ export const getPersonsFailure =
     createFailureAction<GetPersonsFailureAction>(GET_PERSONS_FAILURE)
 
 // =============================================================================
+
+export const createClaim = createActionWithSingleArg<
+    CreateClaimAction,
+    FilterClaim
+>(CREATE_CLAIM, 'filterClaim')
+
+export const deleteClaim = createActionWithSingleArg<
+    DeleteClaimAction,
+    FilterClaim
+>(DELETE_CLAIM, 'filterClaim')

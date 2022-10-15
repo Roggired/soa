@@ -1,9 +1,16 @@
-import { Person } from '../lib'
+import { Color, Person } from '../lib'
 import {
-    CREATE_PERSON_SUCCESS,
+    CREATE_CLAIM,
+    DELETE_CLAIM,
     GET_PERSONS_SUCCESS,
     PersonActions,
 } from './actionTypes'
+
+export interface FilterClaim {
+    readonly prop: string
+    readonly filter: string | Color | number
+    readonly sort: 'ASC' | 'DES' | 'NO'
+}
 
 export interface PersonsState {
     persons: Person[]
@@ -11,14 +18,16 @@ export interface PersonsState {
     pageSize: number
     elementsSize: number | null
     pagesTotal: number | null
+    filterClaims: FilterClaim[]
 }
 
 export const initialState: PersonsState = {
     persons: [],
     currentPage: 0,
-    pageSize: 10,
+    pageSize: 3,
     elementsSize: null,
     pagesTotal: null,
+    filterClaims: [],
 }
 
 export const reducer = (
@@ -47,6 +56,25 @@ export const reducer = (
                 pageSize: action.payload.pageSize,
                 elementsSize: action.payload.elementsTotal,
                 pagesTotal: action.payload.pagesTotal,
+            }
+        case CREATE_CLAIM:
+            return {
+                ...state,
+                filterClaims: [
+                    ...state.filterClaims,
+                    action.payload.filterClaim,
+                ],
+            }
+        case DELETE_CLAIM:
+            const c = action.payload.filterClaim
+            return {
+                ...state,
+                filterClaims: state.filterClaims.filter(
+                    (claim) =>
+                        claim.filter === c.filter &&
+                        claim.sort === c.sort &&
+                        claim.prop === c.prop,
+                ),
             }
         default:
             return state

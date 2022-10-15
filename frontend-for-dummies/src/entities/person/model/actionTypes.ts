@@ -1,5 +1,6 @@
 import { ErrorAction } from '../../../shared/lib/state'
 import { Person } from '../lib'
+import { FilterClaim } from './store'
 
 export const CREATE_PERSON = '@@persons/CREATE_PERSON'
 export const CREATE_PERSON_REQUEST = '@@persons/CREATE_PERSON_REQUEST'
@@ -148,6 +149,26 @@ export interface GetPersonsFailureAction extends ErrorAction {
 
 // ==============================================================================
 
+export const CREATE_CLAIM = '@@persons/CREATE_CLAIM'
+
+export interface CreateClaimAction {
+    type: typeof CREATE_CLAIM
+    payload: {
+        filterClaim: FilterClaim
+    }
+}
+
+export const DELETE_CLAIM = 'DELETE_CLAIM'
+
+export interface DeleteClaimAction {
+    type: typeof DELETE_CLAIM
+    payload: {
+        filterClaim: FilterClaim
+    }
+}
+
+// ==============================================================================
+
 export type PersonActions =
     | CreatePersonAction
     | CreatePersonSuccessAction
@@ -169,3 +190,5 @@ export type PersonActions =
     | GetPersonsRequestAction
     | GetPersonsSuccessAction
     | GetPersonsFailureAction
+    | CreateClaimAction
+    | DeleteClaimAction

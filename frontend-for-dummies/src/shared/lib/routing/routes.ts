@@ -1,2 +1,5 @@
 export const ROOT = '/'
 export const EDITOR = '/editor'
+export const FILTERING_AND_SORTING = '/filtering-sorting'
+export const DEMOGRAPHY = '/demography'
+export const STATS = '/stats'
