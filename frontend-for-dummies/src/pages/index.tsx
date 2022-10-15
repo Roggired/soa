@@ -3,11 +3,15 @@ import { routes } from '../shared/lib/routing'
 import { CollectionScreen } from './collection'
 import { EditorScreen } from './editor'
 import { FilterSortingScreen } from './filter-and-sorting'
+import { DemographyScreen } from './demography'
+import { StatsScreen } from './stats'
 
 export const Routing = () => (
     <Switch>
         <Route exact path={routes.ROOT} component={CollectionScreen} />
         <Route path={routes.EDITOR} component={EditorScreen} />
+        <Route path={routes.DEMOGRAPHY} component={DemographyScreen} />
+        <Route path={routes.STATS} component={StatsScreen} />
         <Route
             path={routes.FILTERING_AND_SORTING}
             component={FilterSortingScreen}
