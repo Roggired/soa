@@ -3,16 +3,30 @@ import { sagaTemplates } from '../../../../shared/api'
 import {
     createPersonFailure,
     createPersonRequest,
+    deletePersonFailure,
+    deletePersonRequest,
     getPersonsFailure,
     getPersonsRequest,
+    updatePerson,
+    updatePersonFailure,
+    updatePersonRequest,
 } from '../actions'
 import {
     CREATE_PERSON,
     CreatePersonAction,
+    DELETE_PERSON,
+    DeletePersonAction,
     GET_PERSONS,
     GetPersonsAction,
+    UPDATE_PERSON,
+    UpdatePersonAction,
 } from '../actionTypes'
-import { handleCreatePerson, handleGetPersons } from './workers/getAllLabs'
+import {
+    handleCreatePerson,
+    handleDeletePerson,
+    handleGetPersons,
+    handleUpdatePerson,
+} from './workers/getAllLabs'
 
 export function* watchGetPersons() {
     yield takeLatest(
@@ -32,6 +46,28 @@ export function* watchCreatePerson() {
             handleCreatePerson,
             createPersonRequest,
             createPersonFailure,
+        ),
+    )
+}
+
+export function* watchUpdatePerson() {
+    yield takeLatest(
+        UPDATE_PERSON,
+        sagaTemplates.withErrorHandlingAndLoading<UpdatePersonAction>(
+            handleUpdatePerson,
+            updatePersonRequest,
+            updatePersonFailure,
+        ),
+    )
+}
+
+export function* watchDeletePerson() {
+    yield takeLatest(
+        DELETE_PERSON,
+        sagaTemplates.withErrorHandlingAndLoading<DeletePersonAction>(
+            handleDeletePerson,
+            deletePersonRequest,
+            deletePersonFailure,
         ),
     )
 }

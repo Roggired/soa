@@ -1,6 +1,16 @@
 import { all, fork } from 'redux-saga/effects'
-import { watchCreatePerson, watchGetPersons } from './watchers'
+import {
+    watchCreatePerson,
+    watchDeletePerson,
+    watchGetPersons,
+    watchUpdatePerson,
+} from './watchers'
 
 export function* rootSaga() {
-    yield all([fork(watchGetPersons), fork(watchCreatePerson)])
+    yield all([
+        fork(watchGetPersons),
+        fork(watchCreatePerson),
+        fork(watchDeletePerson),
+        fork(watchUpdatePerson),
+    ])
 }

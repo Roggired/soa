@@ -1,10 +1,21 @@
 import { AxiosResponse } from 'axios'
+import { act } from 'react-dom/test-utils'
 import { call, cps, put } from 'redux-saga/effects'
 import { apiCaller } from '../../../../../shared/api'
 import { ROOT } from '../../../../../shared/lib/routing/routes'
 import { successToast } from '../../../../../shared/lib/toasts'
-import { createPersonSuccess, getPersonsSuccess } from '../../actions'
-import { CreatePersonAction, GetPersonsAction } from '../../actionTypes'
+import {
+    createPersonSuccess,
+    deletePersonSuccess,
+    getPersonsSuccess,
+    updatePersonSuccess,
+} from '../../actions'
+import {
+    CreatePersonAction,
+    DeletePersonAction,
+    GetPersonsAction,
+    UpdatePersonAction,
+} from '../../actionTypes'
 import { Builder, parseString } from 'xml2js'
 import { XMLBuilder, XMLParser } from 'fast-xml-parser'
 import { Color, Person } from '../../../lib'
@@ -72,6 +83,7 @@ const createCreatePersonReq = (person: Person) =>
 \t\t<z>${person.location.z}</z>
 \t\t<name>${person.location.name}</name>
 \t</location>
+\t<nationality>${person.nationality}</nationality>
 </Person>`
 
 export function* handleCreatePerson(action: CreatePersonAction) {
@@ -87,4 +99,29 @@ export function* handleCreatePerson(action: CreatePersonAction) {
     yield put(createPersonSuccess())
     successToast('Person successfully created')
     action.payload.history.push(ROOT)
+}
+
+export function* handleUpdatePerson(action: UpdatePersonAction) {
+    const response: AxiosResponse = yield call(apiCaller, {
+        route: `/persons/${action.payload.person.id}`,
+        method: 'PUT',
+        data: createCreatePersonReq(action.payload.person),
+    })
+
+    const result = parser.parse(response.data)
+    console.log(result)
+    yield put(updatePersonSuccess())
+    successToast('Person successfully updated')
+    action.payload.history.push(ROOT)
+}
+
+export function* handleDeletePerson(action: DeletePersonAction) {
+    const response: AxiosResponse = yield call(apiCaller, {
+        route: `/persons/${action.payload.id}`,
+        method: 'DELETE',
+    })
+
+    yield put(deletePersonSuccess())
+    successToast('Person successfully deleted')
+    window.location.reload()
 }

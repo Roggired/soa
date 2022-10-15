@@ -65,36 +65,34 @@ export const createPersonFailure =
 
 // =============================================================================
 
-export const deletePerson = createActionWithSingleArg<
+export const deletePerson = createActionWithDoubleArgs<
     DeletePersonAction,
-    number
->(DELETE_PERSON, 'number')
+    number,
+    any
+>(DELETE_PERSON, 'id', 'history')
 
 export const deletePersonRequest =
     createActionWithNoArgs<DeletePersonRequestAction>(DELETE_PERSON_REQUEST)
 
-export const deletePersonSuccess = createActionWithSingleArg<
-    DeletePersonSuccessAction,
-    number
->(DELETE_PERSON_SUCCESS, 'number')
+export const deletePersonSuccess =
+    createActionWithNoArgs<DeletePersonSuccessAction>(DELETE_PERSON_SUCCESS)
 
 export const deletePersonFailure =
     createFailureAction<DeletePersonFailureAction>(DELETE_PERSON_FAILURE)
 
 // =============================================================================
 
-export const updatePerson = createActionWithSingleArg<
+export const updatePerson = createActionWithDoubleArgs<
     UpdatePersonAction,
-    Person
->(UPDATE_PERSON, 'person')
+    Person,
+    any
+>(UPDATE_PERSON, 'person', 'history')
 
 export const updatePersonRequest =
     createActionWithNoArgs<UpdatePersonRequestAction>(UPDATE_PERSON_REQUEST)
 
-export const updatePersonSuccess = createActionWithSingleArg<
-    UpdatePersonSuccessAction,
-    Person
->(UPDATE_PERSON_SUCCESS, 'person')
+export const updatePersonSuccess =
+    createActionWithNoArgs<UpdatePersonSuccessAction>(UPDATE_PERSON_SUCCESS)
 
 export const updatePersonFailure =
     createFailureAction<UpdatePersonFailureAction>(UPDATE_PERSON_FAILURE)

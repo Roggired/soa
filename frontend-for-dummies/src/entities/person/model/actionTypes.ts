@@ -37,6 +37,7 @@ export interface DeletePersonAction {
     type: typeof DELETE_PERSON
     payload: {
         readonly id: number
+        readonly history: any
     }
 }
 
@@ -46,9 +47,6 @@ export interface DeletePersonRequestAction {
 
 export interface DeletePersonSuccessAction {
     type: typeof DELETE_PERSON_SUCCESS
-    payload: {
-        readonly id: number
-    }
 }
 
 export interface DeletePersonFailureAction extends ErrorAction {
@@ -98,6 +96,7 @@ export interface UpdatePersonAction {
     type: typeof UPDATE_PERSON
     payload: {
         readonly person: Person
+        readonly history: any
     }
 }
 
@@ -107,9 +106,6 @@ export interface UpdatePersonRequestAction {
 
 export interface UpdatePersonSuccessAction {
     type: typeof UPDATE_PERSON_SUCCESS
-    payload: {
-        readonly person: Person
-    }
 }
 
 export interface UpdatePersonFailureAction extends ErrorAction {

@@ -71,7 +71,11 @@ export const EditorScreenContainer = () => {
                 return
             }
 
-            dispatch(personModel.actions.createPerson(person, history))
+            if (mode === 'new') {
+                dispatch(personModel.actions.createPerson(person, history))
+            } else {
+                dispatch(personModel.actions.updatePerson(person, history))
+            }
         }
     }
 
