@@ -25,7 +25,6 @@ export const EditorScreenView: FC<EditorScreenViewProps> = ({
     person,
     mode,
 }) => {
-    console.log('EditorScreenView', person)
     const history = useHistory()
 
     const [name, setName] = useState<string>(person.name)

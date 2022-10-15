@@ -31,20 +31,20 @@ export const reducer = (
             // console.log('oldIds', oldIds)
             const newIds = action.payload.persons.map((p) => p.id)
             // console.log('newIds', newIds)
-            const newPersonToAddIds = newIds.filter(
-                (id) => !oldIds.includes(id),
+            const personsToDeleteIds = oldIds.filter((id) =>
+                newIds.includes(id),
             )
-            // console.log('newPersonToAddIds', newPersonToAddIds)
-            const newPersonsToAdd = action.payload.persons.filter((person) =>
-                newPersonToAddIds.includes(person.id),
+            // console.log('personsToDelete', personsToDeleteIds)
+            const oldPersons = state.persons.filter(
+                (person) => !personsToDeleteIds.includes(person.id),
             )
-            console.log(newPersonsToAdd)
+            // console.log(oldPersons)
 
             return {
                 ...state,
-                persons: [...state.persons, ...newPersonsToAdd],
+                persons: [...oldPersons, ...action.payload.persons],
                 currentPage: action.payload.pageIndex,
-                pageSize: action.payload.persons.length,
+                pageSize: action.payload.pageSize,
                 elementsSize: action.payload.elementsTotal,
                 pagesTotal: action.payload.pagesTotal,
             }

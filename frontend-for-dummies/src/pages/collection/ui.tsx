@@ -1,20 +1,26 @@
 import React, { FC, MouseEventHandler, useEffect } from 'react'
-import { PersonsState } from '../../entities/person/model'
+import { useHistory } from 'react-router-dom'
+import { Person } from '../../entities/person/lib'
+import { EDITOR } from '../../shared/lib/routing/routes'
 import { Button, FlexRow, SizedBox } from '../../shared/ui'
 import { Navbar } from '../ui/NavBar'
-import { useHistory } from 'react-router-dom'
-import { EDITOR } from '../../shared/lib/routing/routes'
 
 type CollectionScreenViewProps = {
-    readonly personState: PersonsState
     readonly currentPage: number
+    readonly persons: Person[]
+    readonly elementsSize: number
     readonly onDeleteClick: (id: number) => MouseEventHandler<HTMLButtonElement>
+    readonly onNextPageClick: MouseEventHandler<HTMLButtonElement>
+    readonly onPreviousPageClick: MouseEventHandler<HTMLButtonElement>
 }
 
 export const CollectionScreenView: FC<CollectionScreenViewProps> = ({
     currentPage,
-    personState: { persons, pagesTotal, elementsSize, pageSize },
+    persons,
+    elementsSize,
     onDeleteClick,
+    onNextPageClick,
+    onPreviousPageClick,
 }) => {
     const history = useHistory()
 
@@ -26,16 +32,26 @@ export const CollectionScreenView: FC<CollectionScreenViewProps> = ({
     return (
         <>
             <Navbar links={[]} />
-            <div className="container">
+            <div className="container" style={{ width: '90%' }}>
                 <SizedBox height="2rem" />
                 <FlexRow>
                     <span style={{ marginRight: 'auto' }}>
                         Total persons: {elementsSize}
                     </span>
                     <span className="valign-wrapper">
-                        <i className="material-icons">navigate_before</i>
+                        <i
+                            style={{ cursor: 'pointer', userSelect: 'none' }}
+                            className="material-icons"
+                            onClick={onPreviousPageClick}>
+                            navigate_before
+                        </i>
                         {`${currentPage}`}
-                        <i className="material-icons">navigate_next</i>
+                        <i
+                            className="material-icons"
+                            style={{ cursor: 'pointer', userSelect: 'none' }}
+                            onClick={onNextPageClick}>
+                            navigate_next
+                        </i>
                     </span>
                 </FlexRow>
                 <table className="striped centered highlight">
@@ -44,18 +60,34 @@ export const CollectionScreenView: FC<CollectionScreenViewProps> = ({
                             <th>ID</th>
                             <th>Name</th>
                             <th>Creation date</th>
+                            <th>Coord X</th>
+                            <th>Coord Y</th>
+                            <th>Height</th>
+                            <th>Eye color</th>
+                            <th>Hair color</th>
+                            <th>Loc X</th>
+                            <th>Loc Y</th>
+                            <th>Loc Name</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {persons.map((person) => (
+                        {persons.map((person, index) => (
                             <tr>
                                 <td>{person.id}</td>
                                 <td>{person.name}</td>
                                 <td>{person.creationDate.toDateString()}</td>
+                                <td>{person.coordinates.x}</td>
+                                <td>{person.coordinates.y}</td>
+                                <td>{person.height}</td>
+                                <td>{person.eyeColor}</td>
+                                <td>{person.hairColor}</td>
+                                <td>{person.location.x}</td>
+                                <td>{person.location.y}</td>
+                                <td>{person.location.name}</td>
                                 <td>
                                     <Button
-                                        style={{ marginRight: '1rem' }}
+                                        style={{ marginRight: '1px' }}
                                         onClick={(event) => {
                                             event.preventDefault()
                                             history.push({
@@ -79,7 +111,7 @@ export const CollectionScreenView: FC<CollectionScreenViewProps> = ({
                                                 },
                                             })
                                         }}
-                                        style={{ marginRight: '1rem' }}>
+                                        style={{ marginRight: '1px' }}>
                                         <i className="material-icons">more</i>
                                     </Button>
 

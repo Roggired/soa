@@ -12,7 +12,9 @@ export const Navbar: FC<NavbarProps> = ({ links }) => {
     return (
         <nav>
             <div className="nav-wrapper">
-                <a className="left brand-logo">Dionysius</a>
+                <a className="left brand-logo" style={{ marginLeft: '1rem' }}>
+                    Dionysius
+                </a>
                 <ul className="right">
                     {links.map((link, index) => (
                         <li key={index.toString()}>
