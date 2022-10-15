@@ -69,6 +69,10 @@ class Person {
         location = Location(),
         nationality = ""
     )
+
+    override fun toString(): String {
+        return "Person(id=$id, name='$name', coordinates=$coordinates, creationDate=$creationDate, height=$height, birthday=$birthday, eyeColor=$eyeColor, hairColor=$hairColor, location=$location, nationality='$nationality')"
+    }
 }
 
 @XmlRootElement

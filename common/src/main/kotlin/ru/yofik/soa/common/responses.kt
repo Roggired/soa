@@ -9,7 +9,7 @@ import javax.xml.bind.annotation.XmlAccessorType
 import javax.xml.bind.annotation.XmlRootElement
 import javax.xml.bind.annotation.XmlSeeAlso
 
-@XmlRootElement
+@XmlRootElement(name = "BadRequestResponse")
 @XmlAccessorType(XmlAccessType.FIELD)
 data class BadRequestResponse(
     val status: String = "BAD_REQUEST",
@@ -18,7 +18,7 @@ data class BadRequestResponse(
     constructor(): this(payload = null)
 }
 
-@XmlRootElement
+@XmlRootElement(name = "ResponseString")
 @XmlAccessorType(XmlAccessType.FIELD)
 data class ResponseString(
     val status: String = "OK",
@@ -27,7 +27,7 @@ data class ResponseString(
     constructor(): this(payload = null)
 }
 
-@XmlRootElement
+@XmlRootElement(name = "ResponsePerson")
 @XmlAccessorType(XmlAccessType.FIELD)
 data class ResponsePerson(
     val status: String = "OK",
@@ -36,7 +36,7 @@ data class ResponsePerson(
     constructor(): this(payload = null)
 }
 
-@XmlRootElement
+@XmlRootElement(name = "ResponsePage")
 @XmlAccessorType(XmlAccessType.FIELD)
 data class ResponsePage(
     val status: String = "OK",
@@ -45,7 +45,7 @@ data class ResponsePage(
     constructor(): this(payload = null)
 }
 
-@XmlRootElement
+@XmlRootElement(name = "ResponseListPerson")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlSeeAlso(value = [Person::class, Coordinates::class, Location::class, Color::class])
 data class ResponseListPerson(
@@ -55,7 +55,7 @@ data class ResponseListPerson(
     constructor(): this(payload = null)
 }
 
-@XmlRootElement
+@XmlRootElement(name = "ResponseDouble")
 @XmlAccessorType(XmlAccessType.FIELD)
 data class ResponseDouble(
     val status: String = "OK",
@@ -64,7 +64,7 @@ data class ResponseDouble(
     constructor(): this(payload = null)
 }
 
-@XmlRootElement
+@XmlRootElement(name = "ResponseInteger")
 @XmlAccessorType(XmlAccessType.FIELD)
 data class ResponseInteger(
     val status: String = "OK",

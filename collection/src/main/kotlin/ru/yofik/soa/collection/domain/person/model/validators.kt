@@ -13,6 +13,9 @@ fun Person.validate() {
     if (height <= 0) {
         throw InvalidDataException("Person's height must be greater than 0")
     }
+
+    coordinates.validate()
+    location.validate()
 }
 
 fun Coordinates.validate() {

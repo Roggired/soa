@@ -41,9 +41,12 @@ class PersonResource {
 
     @POST
     @Consumes(MediaType.APPLICATION_XML)
-    fun createPerson(personDto: Person): ResponsePerson = ResponsePerson(
-        payload = personService!!.create(personDto)
-    )
+    fun createPerson(personDto: Person): ResponsePerson {
+        println("$personDto")
+        return ResponsePerson(
+            payload = personService!!.create(personDto)
+        )
+    }
 
     @PUT
     @Path("/{id}")
