@@ -27,9 +27,22 @@ export const reducer = (
 ): PersonsState => {
     switch (action.type) {
         case GET_PERSONS_SUCCESS:
+            const oldIds = state.persons.map((p) => p.id)
+            // console.log('oldIds', oldIds)
+            const newIds = action.payload.persons.map((p) => p.id)
+            // console.log('newIds', newIds)
+            const newPersonToAddIds = newIds.filter(
+                (id) => !oldIds.includes(id),
+            )
+            // console.log('newPersonToAddIds', newPersonToAddIds)
+            const newPersonsToAdd = action.payload.persons.filter((person) =>
+                newPersonToAddIds.includes(person.id),
+            )
+            console.log(newPersonsToAdd)
+
             return {
                 ...state,
-                persons: [...state.persons, ...action.payload.persons],
+                persons: [...state.persons, ...newPersonsToAdd],
                 currentPage: action.payload.pageIndex,
                 pageSize: action.payload.persons.length,
                 elementsSize: action.payload.elementsTotal,

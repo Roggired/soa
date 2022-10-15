@@ -7,7 +7,7 @@ import { createPersonSuccess, getPersonsSuccess } from '../../actions'
 import { CreatePersonAction, GetPersonsAction } from '../../actionTypes'
 import { Builder, parseString } from 'xml2js'
 import { XMLBuilder, XMLParser } from 'fast-xml-parser'
-import { Person } from '../../../lib'
+import { Color, Person } from '../../../lib'
 
 const builder = new XMLBuilder({})
 const parser = new XMLParser()
@@ -37,6 +37,8 @@ export function* handleGetPersons(action: GetPersonsAction) {
         ...person,
         creationDate: new Date(person.creationDate as unknown as string),
         birthday: new Date(person.birthday as unknown as string),
+        eyeColor: Color[person.eyeColor as unknown as keyof typeof Color],
+        hairColor: Color[person.hairColor as unknown as keyof typeof Color],
     }))
 
     yield put(
@@ -73,6 +75,7 @@ const createCreatePersonReq = (person: Person) =>
 </Person>`
 
 export function* handleCreatePerson(action: CreatePersonAction) {
+    console.log(action.payload.person)
     const response: AxiosResponse = yield call(apiCaller, {
         route: '/persons',
         method: 'POST',

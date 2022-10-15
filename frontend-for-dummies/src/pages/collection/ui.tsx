@@ -61,14 +61,25 @@ export const CollectionScreenView: FC<CollectionScreenViewProps> = ({
                                             history.push({
                                                 pathname: EDITOR,
                                                 state: {
-                                                    id: person.id,
+                                                    person: person,
+                                                    mode: 'edit',
                                                 },
                                             })
                                         }}>
                                         <i className="material-icons">edit</i>
                                     </Button>
 
-                                    <Button style={{ marginRight: '1rem' }}>
+                                    <Button
+                                        onClick={() => {
+                                            history.push({
+                                                pathname: EDITOR,
+                                                state: {
+                                                    person: person,
+                                                    mode: 'view',
+                                                },
+                                            })
+                                        }}
+                                        style={{ marginRight: '1rem' }}>
                                         <i className="material-icons">more</i>
                                     </Button>
 
@@ -88,7 +99,8 @@ export const CollectionScreenView: FC<CollectionScreenViewProps> = ({
                     history.push({
                         pathname: EDITOR,
                         state: {
-                            id: null,
+                            person: null,
+                            mode: 'new',
                         },
                     })
                 }}>

@@ -17,13 +17,17 @@ class Person {
     var id: Int
     var name: String
     var coordinates: Coordinates
+
     @XmlJavaTypeAdapter(value = LocalDateJaxbAdapter::class)
     var creationDate: LocalDate
     var height: Int
+
     @XmlJavaTypeAdapter(value = LocalDateTimeJaxbAdapter::class)
     var birthday: LocalDateTime
+
     @XmlJavaTypeAdapter(value = ColorJaxbAdapter::class)
     var eyeColor: Color
+
     @XmlJavaTypeAdapter(value = ColorJaxbAdapter::class)
     var hairColor: Color?
     var location: Location
@@ -53,7 +57,7 @@ class Person {
         this.nationality = nationality
     }
 
-    constructor(): this(
+    constructor() : this(
         id = 0,
         name = "",
         coordinates = Coordinates(),
@@ -71,10 +75,10 @@ class Person {
 @XmlAccessorType(XmlAccessType.FIELD)
 class Coordinates(
     var id: Long,
-    var x : Long,
+    var x: Long,
     var y: Double
 ) {
-    constructor(): this(
+    constructor() : this(
         id = 0L,
         x = 0L,
         y = 0.0
@@ -90,7 +94,7 @@ class Location(
     var z: Float,
     var name: String
 ) {
-    constructor(): this(
+    constructor() : this(
         id = 0L,
         x = 0L,
         y = 0.0f,
@@ -100,5 +104,5 @@ class Location(
 }
 
 enum class Color {
-    GREEN, RED, YELLOW, ORANGE
+    GREEN, RED, YELLOW, ORANGE, BLACK, BLUE, BROWN
 }

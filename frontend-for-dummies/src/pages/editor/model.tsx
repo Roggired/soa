@@ -12,8 +12,8 @@ const emptyPerson = (): Person => ({
     creationDate: new Date(),
     height: 0,
     birthday: new Date(),
-    eyeColor: Color.GREEN,
-    hairColor: Color.GREEN,
+    eyeColor: Color.GREEN.valueOf(),
+    hairColor: Color.GREEN.valueOf(),
     nationality: '',
     location: {
         x: 0,
@@ -32,9 +32,7 @@ export const EditorScreenContainer = () => {
     const location = useLocation()
     const history = useHistory()
 
-    // @ts-ignore
-    // const passedId = location?.state
-    const person = emptyPerson()
+    const { mode, person } = location.state as { person: Person; mode: string }
 
     const onPersonSubmit = (
         person: Person,
@@ -58,6 +56,11 @@ export const EditorScreenContainer = () => {
                 return
             }
 
+            if (person.nationality === '') {
+                failToast('Nationality cant be empty')
+                return
+            }
+
             if (person.coordinates.y <= -348) {
                 failToast('Coordinates x should be > -348')
                 return
@@ -72,5 +75,11 @@ export const EditorScreenContainer = () => {
         }
     }
 
-    return <EditorScreenView person={person} onPersonSubmit={onPersonSubmit} />
+    return (
+        <EditorScreenView
+            person={person ? person : emptyPerson()}
+            onPersonSubmit={onPersonSubmit}
+            mode={mode}
+        />
+    )
 }
