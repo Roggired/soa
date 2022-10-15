@@ -2,7 +2,7 @@ import React, { MouseEventHandler, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { personModel } from '../../entities/person'
 import { EditorScreenView } from './ui'
-import { useLocation } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 import { Color, Person } from '../../entities/person/lib'
 import { failToast } from '../../shared/lib/toasts'
 
@@ -30,6 +30,7 @@ const emptyPerson = (): Person => ({
 export const EditorScreenContainer = () => {
     const dispatch = useDispatch()
     const location = useLocation()
+    const history = useHistory()
 
     // @ts-ignore
     // const passedId = location?.state
@@ -67,7 +68,7 @@ export const EditorScreenContainer = () => {
                 return
             }
 
-            dispatch(personModel.actions.createPerson(person))
+            dispatch(personModel.actions.createPerson(person, history))
         }
     }
 

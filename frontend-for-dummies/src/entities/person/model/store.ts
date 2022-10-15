@@ -35,11 +35,6 @@ export const reducer = (
                 elementsSize: action.payload.elementsTotal,
                 pagesTotal: action.payload.pagesTotal,
             }
-        case CREATE_PERSON_SUCCESS:
-            return {
-                ...state,
-                persons: [...state.persons, action.payload.person],
-            }
         default:
             return state
     }

@@ -48,18 +48,17 @@ import {
     UpdatePersonSuccessAction,
 } from './actionTypes'
 
-export const createPerson = createActionWithSingleArg<
+export const createPerson = createActionWithDoubleArgs<
     CreatePersonAction,
-    Person
->(CREATE_PERSON, 'person')
+    Person,
+    any
+>(CREATE_PERSON, 'person', 'history')
 
 export const createPersonRequest =
     createActionWithNoArgs<CreatePersonRequestAction>(CREATE_PERSON_REQUEST)
 
-export const createPersonSuccess = createActionWithSingleArg<
-    CreatePersonSuccessAction,
-    Person
->(CREATE_PERSON_SUCCESS, 'person')
+export const createPersonSuccess =
+    createActionWithNoArgs<CreatePersonSuccessAction>(CREATE_PERSON_SUCCESS)
 
 export const createPersonFailure =
     createFailureAction<CreatePersonFailureAction>(CREATE_PERSON_FAILURE)

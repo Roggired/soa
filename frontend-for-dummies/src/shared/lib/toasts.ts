@@ -1,5 +1,5 @@
 const successToast = (message: string) => {
-    M.toast({ html: `<span>${message}</span>` })
+    M.toast({ html: `<span>${message}</span>`, classes: 'green' })
 }
 
 const failToast = (message: string) => {

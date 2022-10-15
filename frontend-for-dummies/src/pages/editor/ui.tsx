@@ -5,8 +5,10 @@ import React, {
     useRef,
     useState,
 } from 'react'
+import { useHistory } from 'react-router-dom'
+import { ROOT } from '../../shared/lib/routing/routes'
 import { Navbar } from '../ui/NavBar'
-import { Button, SizedBox } from '../../shared/ui'
+import { Button, FlexRow, SizedBox } from '../../shared/ui'
 import DateTimePicker from 'react-datetime-picker'
 import { Color, Person } from '../../entities/person/lib'
 
@@ -21,6 +23,8 @@ export const EditorScreenView: FC<EditorScreenViewProps> = ({
     onPersonSubmit,
     person,
 }) => {
+    const history = useHistory()
+
     const [name, setName] = useState<string>(person.name)
     const [height, setHeight] = useState<number>(person.height)
     const [birthday, setBirthday] = useState(person.birthday)
@@ -42,6 +46,7 @@ export const EditorScreenView: FC<EditorScreenViewProps> = ({
         const instances = M.FormSelect.init(elems)
     }, [])
 
+    // @ts-ignore
     // @ts-ignore
     return (
         <>
@@ -192,32 +197,48 @@ export const EditorScreenView: FC<EditorScreenViewProps> = ({
                         </div>
                     </div>
 
-                    <Button
-                        onClick={(event) =>
-                            onPersonSubmit({
-                                id: person.id,
-                                name,
-                                creationDate: person.creationDate,
-                                coordinates: {
-                                    x: coorX,
-                                    y: coorY,
-                                },
-                                birthday,
-                                height,
-                                // @ts-ignore
-                                eyeColor: Color[+eyeColorRef.current.value],
-                                // @ts-ignore
-                                hairColor: Color[+hairColorRef.current.value],
-                                location: {
-                                    x: locX,
-                                    y: locY,
-                                    z: locZ,
-                                    name: locName,
-                                },
-                            })(event)
-                        }>
-                        Submit
-                    </Button>
+                    <FlexRow>
+                        <Button
+                            style={{ marginRight: 'auto' }}
+                            onClick={(event) =>
+                                onPersonSubmit({
+                                    id: person.id,
+                                    name,
+                                    creationDate: person.creationDate,
+                                    coordinates: {
+                                        x: coorX,
+                                        y: coorY,
+                                    },
+                                    birthday,
+                                    height,
+                                    // @ts-ignore
+                                    eyeColor:
+                                        // @ts-ignore
+                                        Color[+eyeColorRef.current.value - 1],
+                                    // @ts-ignore
+                                    hairColor:
+                                        Color[
+                                            // @ts-ignore
+                                            +hairColorRef.current.value - 1
+                                        ].toString(),
+                                    location: {
+                                        x: locX,
+                                        y: locY,
+                                        z: locZ,
+                                        name: locName,
+                                    },
+                                })(event)
+                            }>
+                            Submit
+                        </Button>
+
+                        <Button
+                            onClick={() => {
+                                history.push(ROOT)
+                            }}>
+                            Close
+                        </Button>
+                    </FlexRow>
                     <SizedBox height="3rem" />
                 </div>
             </div>

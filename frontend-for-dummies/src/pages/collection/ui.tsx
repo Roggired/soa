@@ -43,6 +43,7 @@ export const CollectionScreenView: FC<CollectionScreenViewProps> = ({
                         <tr>
                             <th>ID</th>
                             <th>Name</th>
+                            <th>Creation date</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -51,8 +52,10 @@ export const CollectionScreenView: FC<CollectionScreenViewProps> = ({
                             <tr>
                                 <td>{person.id}</td>
                                 <td>{person.name}</td>
+                                <td>{person.creationDate.toDateString()}</td>
                                 <td>
                                     <Button
+                                        style={{ marginRight: '1rem' }}
                                         onClick={(event) => {
                                             event.preventDefault()
                                             history.push({
@@ -64,6 +67,11 @@ export const CollectionScreenView: FC<CollectionScreenViewProps> = ({
                                         }}>
                                         <i className="material-icons">edit</i>
                                     </Button>
+
+                                    <Button style={{ marginRight: '1rem' }}>
+                                        <i className="material-icons">more</i>
+                                    </Button>
+
                                     <Button onClick={onDeleteClick(person.id)}>
                                         <i className="material-icons">delete</i>
                                     </Button>
@@ -77,7 +85,12 @@ export const CollectionScreenView: FC<CollectionScreenViewProps> = ({
                 className="fixed-action-btn"
                 onClick={(e) => {
                     e.preventDefault()
-                    history.push(EDITOR)
+                    history.push({
+                        pathname: EDITOR,
+                        state: {
+                            id: null,
+                        },
+                    })
                 }}>
                 <a className="btn-floating btn-large">
                     <i className="large material-icons">add</i>

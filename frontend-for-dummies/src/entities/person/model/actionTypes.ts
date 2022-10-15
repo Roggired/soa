@@ -10,6 +10,7 @@ export interface CreatePersonAction {
     type: typeof CREATE_PERSON
     payload: {
         readonly person: Person
+        readonly history: any
     }
 }
 
@@ -19,9 +20,6 @@ export interface CreatePersonRequestAction {
 
 export interface CreatePersonSuccessAction {
     type: typeof CREATE_PERSON_SUCCESS
-    payload: {
-        readonly person: Person
-    }
 }
 
 export interface CreatePersonFailureAction extends ErrorAction {
