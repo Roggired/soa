@@ -1,4 +1,4 @@
-enum Color {
+export enum Color {
     GREEN,
     YELLOW,
     ORANGE,
@@ -23,11 +23,12 @@ export interface Coordinates {
 export interface Person {
     readonly id: number
     readonly name: string
-    readonly text: string
+    readonly creationDate: Date
     readonly coordinates: Coordinates
-    readonly height: string
+    readonly height: number
     readonly birthday: Date
     readonly eyeColor: Color
     readonly hairColor: Color
     readonly location: Location
+    readonly nationality: string
 }

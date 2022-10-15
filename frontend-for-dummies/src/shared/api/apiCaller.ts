@@ -1,10 +1,7 @@
 import axios, { AxiosResponse } from 'axios'
-import { Builder } from 'xml2js'
 
 const BASE_URL_COLLECTION = 'http://localhost:20000/collection/api/v1'
 const BASE_URL_DEMOGRAPHY = 'http://localhost:20000/demography/api/v1'
-
-const xmlBuilder = new Builder()
 
 export const apiCaller = async ({
     route,
@@ -14,7 +11,7 @@ export const apiCaller = async ({
 }: {
     route: string
     method?: 'POST' | 'GET' | 'PUT' | 'DELETE'
-    data?: object
+    data?: any
     service?: 'COLLECTION' | 'DEMOGRAPHY'
 }): Promise<AxiosResponse> => {
     const headers = {
@@ -28,7 +25,7 @@ export const apiCaller = async ({
     return axios({
         method,
         url: `${baseUrl}${route}`,
-        data: data ? xmlBuilder.buildObject(data) : null,
+        data: data ? data : null,
         headers,
     })
 }

@@ -1,8 +1,18 @@
 import { takeLatest } from 'redux-saga/effects'
 import { sagaTemplates } from '../../../../shared/api'
-import { getPersonsFailure, getPersonsRequest } from '../actions'
-import { GET_PERSONS, GetPersonsAction } from '../actionTypes'
-import { handleGetPersons } from './workers/getAllLabs'
+import {
+    createPersonFailure,
+    createPersonRequest,
+    getPersonsFailure,
+    getPersonsRequest,
+} from '../actions'
+import {
+    CREATE_PERSON,
+    CreatePersonAction,
+    GET_PERSONS,
+    GetPersonsAction,
+} from '../actionTypes'
+import { handleCreatePerson, handleGetPersons } from './workers/getAllLabs'
 
 export function* watchGetPersons() {
     yield takeLatest(
@@ -11,6 +21,17 @@ export function* watchGetPersons() {
             handleGetPersons,
             getPersonsRequest,
             getPersonsFailure,
+        ),
+    )
+}
+
+export function* watchCreatePerson() {
+    yield takeLatest(
+        CREATE_PERSON,
+        sagaTemplates.withErrorHandlingAndLoading<CreatePersonAction>(
+            handleCreatePerson,
+            createPersonRequest,
+            createPersonFailure,
         ),
     )
 }

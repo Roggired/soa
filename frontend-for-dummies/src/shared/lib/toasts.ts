@@ -3,7 +3,7 @@ const successToast = (message: string) => {
 }
 
 const failToast = (message: string) => {
-    M.toast({ html: `<span>${message}</span>` })
+    M.toast({ html: `<span>${message}</span>`, classes: 'red' })
 }
 
 export { successToast, failToast }
