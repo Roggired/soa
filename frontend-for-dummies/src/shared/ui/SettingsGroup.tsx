@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, PropsWithChildren } from 'react'
 import styled from 'styled-components'
 import { Materialize } from '.'
 import { Col } from './material/material-wrappers'
@@ -6,7 +6,6 @@ import { Col } from './material/material-wrappers'
 type SettingsGroupProps = {
     readonly title: string
     readonly description: string
-    children: JSX.Element
 }
 
 const Title = styled.span`
@@ -32,7 +31,7 @@ const StyledContent = styled(Col).attrs((props) => ({
     }
 `
 
-export const SettingsGroup: FC<SettingsGroupProps> = ({
+export const SettingsGroup: FC<PropsWithChildren<SettingsGroupProps>> = ({
     children,
     title,
     description,

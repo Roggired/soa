@@ -49,7 +49,7 @@ export interface GetAmountRequestAction {
 export interface GetAmountSuccessAction {
     type: typeof GET_AMOUNT_SUCCESS
     payload: {
-        readonly amount: string
+        readonly amount: number
     }
 }
 
