@@ -10,25 +10,30 @@ import { FilterClaim } from '../../entities/person/model/store'
 import { useDispatch } from 'react-redux'
 import { personModel } from '../../entities/person'
 import { Navbar } from '../ui/NavBar'
+import { useHistory } from 'react-router-dom'
+import { ROOT } from '../../shared/lib/routing/routes'
 
 type FilterSortingScreenViewProps = {
     readonly filterClaims: FilterClaim[]
-    /*readonly createClaim: (
+    readonly onCreateClaim: (
         prop: string,
         sort: string,
-        filter: string | number,
+        filter: string | number | null,
     ) => MouseEventHandler<HTMLButtonElement>
     readonly onDeleteClaim: (
         prop: string,
         sort: string,
-        filter: string | number,
-    ) => MouseEventHandler<HTMLButtonElement>*/
+        filter: string | number | null,
+    ) => MouseEventHandler<HTMLButtonElement>
 }
 
 export const FilterSortingScreenView: FC<FilterSortingScreenViewProps> = ({
     filterClaims,
+    onDeleteClaim,
+    onCreateClaim,
 }) => {
     const dispatch = useDispatch()
+    const history = useHistory()
 
     const propRef = useRef<HTMLSelectElement>(null)
     const sortRef = useRef<HTMLSelectElement>(null)
@@ -48,25 +53,24 @@ export const FilterSortingScreenView: FC<FilterSortingScreenViewProps> = ({
                 <div className="row valign-wrapper">
                     <div className="input-field col s3">
                         <select ref={propRef}>
-                            <option selected value="person.id">
+                            <option selected value="PERSON_ID">
                                 ID
                             </option>
-                            <option value="person.name">Name</option>
-                            <option value="coordinates.x">Coordinates x</option>
-                            <option value="coordinates.y">Coordinates y</option>
-                            <option value="person.height">Height</option>
-                            <option value="person.birthday">Birthday</option>
-                            <option value="person.eye_color">Eye color</option>
-                            <option value="person.hair_color">
+                            <option value="PERSON_NAME">Name</option>
+                            <option value="COORDINATES_X">Coordinates x</option>
+                            <option value="COORDINATES_Y">Coordinates y</option>
+                            <option value="PERSON_HEIGHT">Height</option>
+                            <option value="PERSON_EYE_COLOR">Eye color</option>
+                            <option value="PERSON_HAIR_COLOR">
                                 Hair color
                             </option>
-                            <option value="person.nationality">
+                            <option value="PERSON_NATIONALITY">
                                 Nationality
                             </option>
-                            <option value="location.x">Location x</option>
-                            <option value="location.y">Location y</option>
-                            <option value="location.z">Location z</option>
-                            <option value="location.name">Location name</option>
+                            <option value="LOCATION_X">Location x</option>
+                            <option value="LOCATION_Y">Location y</option>
+                            <option value="LOCATION_Z">Location z</option>
+                            <option value="LOCATION_NAME">Location name</option>
                         </select>
                     </div>
 
@@ -92,16 +96,14 @@ export const FilterSortingScreenView: FC<FilterSortingScreenViewProps> = ({
 
                     <div className="col s2">
                         <Button
-                            onClick={() =>
-                                dispatch(
-                                    personModel.actions.createClaim({
-                                        filter,
-                                        // @ts-ignore
-                                        prop: propRef.current.value,
-                                        // @ts-ignore
-                                        sort: sortRef.current.value,
-                                    } as FilterClaim),
-                                )
+                            onClick={(event) =>
+                                onCreateClaim(
+                                    // @ts-ignore
+                                    propRef.current.value,
+                                    // @ts-ignore
+                                    sortRef.current.value,
+                                    filter,
+                                )(event)
                             }>
                             <i className="material-icons">add</i>
                         </Button>
@@ -109,37 +111,41 @@ export const FilterSortingScreenView: FC<FilterSortingScreenViewProps> = ({
                 </div>
 
                 <SizedBox height="2rem" />
+                <p>Applied filters:</p>
                 {filterClaims.map((filterClaim) => (
                     <div className="row valign-wrapper">
-                        <div className="input-field col s3">
-                            <select value={filterClaim.prop} disabled>
-                                <option value=""></option>
-                            </select>
+                        <div className=" col s3">
+                            Property: <i>{filterClaim.property}</i>
                         </div>
 
-                        <div className="col s4 input-field">
-                            <input
-                                id="filter"
-                                type="text"
-                                disabled
-                                value={filterClaim.filter}
-                            />
-                            <label htmlFor="filter">Filter by</label>
+                        <div className="col s4">
+                            Filtered by:{' '}
+                            <i>
+                                {filterClaim.filter
+                                    ? filterClaim.filter
+                                    : 'none'}
+                            </i>
                         </div>
 
-                        <div className="input-field col s3">
-                            <select value={filterClaim.sort} disabled>
-                                <option value=""></option>
-                            </select>
+                        <div className=" col s3">
+                            Applied sorting: <i>{filterClaim.sort}</i>
                         </div>
 
                         <div className="col s2">
-                            <Button>
+                            <Button
+                                onClick={onDeleteClaim(
+                                    filterClaim.property,
+                                    filterClaim.sort,
+                                    filterClaim.filter,
+                                )}>
                                 <i className="material-icons">delete</i>
                             </Button>
                         </div>
                     </div>
                 ))}
+                <Button onClick={() => history.push(ROOT)}>
+                    Apply filter claims
+                </Button>
             </div>
         </>
     )

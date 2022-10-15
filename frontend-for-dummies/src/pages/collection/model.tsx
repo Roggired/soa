@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom'
 import { personModel } from '../../entities/person'
 import { Person } from '../../entities/person/lib'
 import { CollectionScreenView } from './ui'
+import { getPersonsSuccess } from '../../entities/person/model/actions'
 
 export const CollectionScreenContainer = () => {
     const dispatch = useDispatch()
@@ -15,17 +16,18 @@ export const CollectionScreenContainer = () => {
 
     useEffect(() => {
         setCurrentPage(personState.currentPage)
-        if (personState.elementsSize) {
+        if (personState.elementsSize !== null) {
             setTotalElements(personState.elementsSize)
         }
     }, [personState])
 
     useEffect(() => {
         if (currentPage >= 0) {
-            console.log('start', currentPage * personState.pageSize)
-            const start = currentPage * personState.pageSize
+            // console.log('start', currentPage * personState.pageSize)
+            // const start = currentPage * personState.pageSize
             setPersons(
-                personState.persons.slice(start, start + personState.pageSize),
+                // personState.persons.slice(start, start + personState.pageSize),
+                personState.persons,
             )
         }
     }, [currentPage, personState])
@@ -35,6 +37,7 @@ export const CollectionScreenContainer = () => {
             personModel.actions.getPersons(
                 personState.pageSize,
                 personState.currentPage,
+                personState.filterClaims,
             ),
         )
     }, [])
@@ -60,6 +63,7 @@ export const CollectionScreenContainer = () => {
                 personModel.actions.getPersons(
                     personState.pageSize,
                     futurePage,
+                    personState.filterClaims,
                 ),
             )
         }
@@ -76,6 +80,13 @@ export const CollectionScreenContainer = () => {
             }
 
             setCurrentPage(futurePage)
+            dispatch(
+                personModel.actions.getPersons(
+                    personState.pageSize,
+                    futurePage,
+                    personState.filterClaims,
+                ),
+            )
         }
     }
 

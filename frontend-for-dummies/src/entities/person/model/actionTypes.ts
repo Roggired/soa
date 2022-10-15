@@ -1,6 +1,7 @@
 import { ErrorAction } from '../../../shared/lib/state'
 import { Person } from '../lib'
 import { FilterClaim } from './store'
+import { SetCurrentPageAction } from './actions'
 
 export const CREATE_PERSON = '@@persons/CREATE_PERSON'
 export const CREATE_PERSON_REQUEST = '@@persons/CREATE_PERSON_REQUEST'
@@ -125,6 +126,7 @@ export interface GetPersonsAction {
     payload: {
         readonly pageSize: number
         readonly pageIndex: number
+        readonly filterClaims: FilterClaim[]
     }
 }
 
@@ -192,3 +194,4 @@ export type PersonActions =
     | GetPersonsFailureAction
     | CreateClaimAction
     | DeleteClaimAction
+    | SetCurrentPageAction

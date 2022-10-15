@@ -17,13 +17,26 @@ import {
 } from '../../actionTypes'
 import { XMLBuilder, XMLParser } from 'fast-xml-parser'
 import { Color, Person } from '../../../lib'
+import { Buffer } from 'buffer'
 
 const builder = new XMLBuilder({})
 const parser = new XMLParser()
 
 export function* handleGetPersons(action: GetPersonsAction) {
+    console.log('filter', action.payload.filterClaims)
+
+    let route: string
+    if (action.payload.filterClaims.length === 0) {
+        route = `/persons?pageSize=${action.payload.pageSize}&pageIndex=${action.payload.pageIndex}`
+    } else {
+        route = `/persons?pageSize=${action.payload.pageSize}&pageIndex=${action.payload.pageIndex}`
+        action.payload.filterClaims.forEach((f) => {
+            route += `&filters=${btoa(JSON.stringify(f))}`
+        })
+    }
+
     const response: AxiosResponse = yield call(apiCaller, {
-        route: `/persons?pageSize=${action.payload.pageSize}&pageIndex=${action.payload.pageIndex}`,
+        route,
         method: 'GET',
     })
 

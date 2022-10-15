@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios'
 
-const BASE_URL_COLLECTION = 'https://localhost:20000/collection/api/v1'
+const BASE_URL_COLLECTION = 'http://localhost:20000/collection/api/v1'
 const BASE_URL_DEMOGRAPHY = 'http://localhost:20000/demography/api/v1'
 
 export const apiCaller = async ({

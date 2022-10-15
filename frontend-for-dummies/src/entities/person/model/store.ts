@@ -5,10 +5,11 @@ import {
     GET_PERSONS_SUCCESS,
     PersonActions,
 } from './actionTypes'
+import { SET_CURRENT_PAGE } from './actions'
 
 export interface FilterClaim {
-    readonly prop: string
-    readonly filter: string | Color | number
+    readonly property: string
+    readonly filter: string | Color | number | null
     readonly sort: 'ASC' | 'DES' | 'NO'
 }
 
@@ -51,7 +52,7 @@ export const reducer = (
 
             return {
                 ...state,
-                persons: [...oldPersons, ...action.payload.persons],
+                persons: [...action.payload.persons],
                 currentPage: action.payload.pageIndex,
                 pageSize: action.payload.pageSize,
                 elementsSize: action.payload.elementsTotal,
@@ -67,14 +68,17 @@ export const reducer = (
             }
         case DELETE_CLAIM:
             const c = action.payload.filterClaim
+            console.log(c)
             return {
                 ...state,
                 filterClaims: state.filterClaims.filter(
-                    (claim) =>
-                        claim.filter === c.filter &&
-                        claim.sort === c.sort &&
-                        claim.prop === c.prop,
+                    (claim) => claim.property !== c.property,
                 ),
+            }
+        case SET_CURRENT_PAGE:
+            return {
+                ...state,
+                currentPage: action.payload.page,
             }
         default:
             return state

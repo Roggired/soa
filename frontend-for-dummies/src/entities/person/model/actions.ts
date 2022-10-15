@@ -2,6 +2,7 @@ import {
     createActionWithDoubleArgs,
     createActionWithNoArgs,
     createActionWithSingleArg,
+    createActionWithTripleArgs,
     createFailureAction,
 } from '../../../shared/lib/state/actionCreators'
 import { Person } from '../lib'
@@ -126,11 +127,26 @@ export const getDefinitePersonFailure =
 
 // =============================================================================
 
-export const getPersons = createActionWithDoubleArgs<GetPersonsAction, number>(
-    GET_PERSONS,
-    'pageSize',
-    'pageIndex',
-)
+export const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE'
+
+export interface SetCurrentPageAction {
+    type: typeof SET_CURRENT_PAGE
+    payload: {
+        page: number
+    }
+}
+
+export const setCurrentPage = createActionWithSingleArg<
+    SetCurrentPageAction,
+    number
+>(SET_CURRENT_PAGE, 'page')
+
+export const getPersons = createActionWithTripleArgs<
+    GetPersonsAction,
+    number,
+    number,
+    FilterClaim[]
+>(GET_PERSONS, 'pageSize', 'pageIndex', 'filterClaims')
 
 export const getPersonsRequest =
     createActionWithNoArgs<GetPersonsRequestAction>(GET_PERSONS_REQUEST)
