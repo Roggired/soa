@@ -66,6 +66,8 @@ class FilterClaimGsonDeserializer: JsonDeserializer<FilterClaim> {
     private fun parseFilter(filterJsonObject: JsonObject): Any? {
         val filterObject = filterJsonObject.get("filter") ?: return null
 
+        if (filterObject.isJsonNull) return null
+
         if (!filterObject.isJsonPrimitive) {
             throw FilterClaimFormatException("FilterClaim's filter field must be of following types: Int, Long, Double, Float, String, Boolean")
         }

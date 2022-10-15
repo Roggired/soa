@@ -121,6 +121,12 @@ class PersonService {
 
     private fun convertToSortCollection(filters: List<FilterClaim>): Collection<String> {
         return filters.filter { it.sort != SortOrder.NO }
-            .map { it.property.column }
+            .map {
+                if (it.sort == SortOrder.ASC) {
+                    it.property.column
+                } else {
+                    "${it.property.column} DESC"
+                }
+            }
     }
 }

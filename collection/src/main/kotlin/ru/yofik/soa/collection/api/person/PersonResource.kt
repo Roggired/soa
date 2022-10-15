@@ -42,7 +42,6 @@ class PersonResource {
     @POST
     @Consumes(MediaType.APPLICATION_XML)
     fun createPerson(personDto: Person): ResponsePerson {
-        println("$personDto")
         return ResponsePerson(
             payload = personService!!.create(personDto)
         )
