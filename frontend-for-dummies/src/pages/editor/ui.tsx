@@ -266,7 +266,7 @@ export const EditorScreenView: FC<EditorScreenViewProps> = ({
                     <FlexRow>
                         <Button
                             onClick={() => {
-                                history.push(ROOT)
+                                history.goBack()
                             }}>
                             Close
                         </Button>

@@ -5,13 +5,14 @@ import React, {
     useRef,
     useState,
 } from 'react'
-import { Button, SizedBox } from '../../shared/ui'
+import { Button, FlexRow, SizedBox } from '../../shared/ui'
 import { FilterClaim } from '../../entities/person/model/store'
 import { useDispatch } from 'react-redux'
 import { personModel } from '../../entities/person'
 import { Navbar } from '../ui/NavBar'
 import { useHistory } from 'react-router-dom'
 import { ROOT } from '../../shared/lib/routing/routes'
+import { Row } from '../../shared/ui/material/material-wrappers'
 
 type FilterSortingScreenViewProps = {
     readonly filterClaims: FilterClaim[]
@@ -143,9 +144,11 @@ export const FilterSortingScreenView: FC<FilterSortingScreenViewProps> = ({
                         </div>
                     </div>
                 ))}
-                <Button onClick={() => history.push(ROOT)}>
-                    Apply filter claims
-                </Button>
+                <FlexRow justifyContent="center">
+                    <Button onClick={() => history.push(ROOT)}>
+                        Apply filter claims
+                    </Button>
+                </FlexRow>
             </div>
         </>
     )

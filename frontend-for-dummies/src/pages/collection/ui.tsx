@@ -1,6 +1,6 @@
 import React, { FC, MouseEventHandler, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
-import { Person } from '../../entities/person/lib'
+import { Color, Person } from '../../entities/person/lib'
 import { EDITOR } from '../../shared/lib/routing/routes'
 import { Button, FlexRow, SizedBox } from '../../shared/ui'
 import { Navbar } from '../ui/NavBar'
@@ -80,8 +80,8 @@ export const CollectionScreenView: FC<CollectionScreenViewProps> = ({
                                 <td>{person.coordinates.x}</td>
                                 <td>{person.coordinates.y}</td>
                                 <td>{person.height}</td>
-                                <td>{person.eyeColor}</td>
-                                <td>{person.hairColor}</td>
+                                <td>{Color[person.eyeColor]}</td>
+                                <td>{Color[person.hairColor]}</td>
                                 <td>{person.location.x}</td>
                                 <td>{person.location.y}</td>
                                 <td>{person.location.name}</td>

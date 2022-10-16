@@ -61,6 +61,7 @@ export const reducer = (
         case CREATE_CLAIM:
             return {
                 ...state,
+                currentPage: 0,
                 filterClaims: [
                     ...state.filterClaims,
                     action.payload.filterClaim,
@@ -71,6 +72,7 @@ export const reducer = (
             console.log(c)
             return {
                 ...state,
+                currentPage: 0,
                 filterClaims: state.filterClaims.filter(
                     (claim) => claim.property !== c.property,
                 ),

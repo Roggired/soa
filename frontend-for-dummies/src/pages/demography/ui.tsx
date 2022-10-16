@@ -67,7 +67,7 @@ export const DemographyScreenView: FC<DemographyScreenViewProps> = ({
                     </div>
 
                     <div className="col s12">
-                        <FlexRow>
+                        <FlexRow alignItems="center">
                             <Button
                                 style={{
                                     marginRight: 'auto',
@@ -108,7 +108,7 @@ export const DemographyScreenView: FC<DemographyScreenViewProps> = ({
                     </div>
 
                     <div className="col s12">
-                        <FlexRow>
+                        <FlexRow alignItems="center">
                             <Button
                                 onClick={(event) =>
                                     // @ts-ignore
