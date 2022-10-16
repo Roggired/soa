@@ -25,6 +25,7 @@ const StyledContent = styled(Col).attrs((props) => ({
 }))`
     margin-bottom: 50px;
     padding: 0;
+    border-radius: 10px;
 
     .setting {
         margin: 1rem;
