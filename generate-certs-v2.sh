@@ -32,3 +32,4 @@ mv device.csr $DOMAIN.csr
 mv device.crt $DOMAIN.crt
 
 openssl pkcs12 -export -in $DOMAIN.crt -inkey device.key -passin pass:111111 -passout pass:111111 -out Server-keystore.p12 >/dev/null
+keytool -import -file rootCA.pem -keystore Server-trustore.p12 -storetype PKCS12 -storepass 111111 -noprompt 2>/dev/null

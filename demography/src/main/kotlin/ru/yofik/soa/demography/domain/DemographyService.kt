@@ -7,6 +7,7 @@ import ru.yofik.soa.common.domain.filterClaim.FilterableProperties
 import ru.yofik.soa.common.domain.filterClaim.SortOrder
 import ru.yofik.soa.common.domain.filterClaim.createFromFilterClaims
 import ru.yofik.soa.common.domain.person.model.Color
+import java.net.Socket
 import javax.enterprise.context.ApplicationScoped
 import javax.inject.Inject
 
