@@ -13,6 +13,7 @@ export function* handleError(
         // console.log(error.response.data)
         console.log(error.response.status)
         console.log(error.response.headers)
+        console.log(error.response)
 
         yield options?.responseFailureCallback(error)
         yield put(failureAction(error.response.status))

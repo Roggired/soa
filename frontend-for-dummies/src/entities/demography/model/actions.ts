@@ -25,8 +25,7 @@ import {
 
 export const getPercentage = createActionWithDoubleArgs<
     GetPercentageAction,
-    string,
-    number
+    string
 >(GET_PERCENTAGE, 'nationality', 'hairColor')
 
 export const getPercentageRequest =
@@ -42,7 +41,7 @@ export const getPercentageFailure =
 
 // =============================================================================
 
-export const getAmount = createActionWithSingleArg<GetAmountAction, number>(
+export const getAmount = createActionWithSingleArg<GetAmountAction, string>(
     GET_AMOUNT,
     'hairColor',
 )

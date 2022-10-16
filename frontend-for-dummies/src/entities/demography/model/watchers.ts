@@ -10,6 +10,7 @@ import {
 import {
     getAmountFailure,
     getAmountRequest,
+    getPercentageFailure,
     getPercentageRequest,
 } from './actions'
 import {
@@ -26,7 +27,7 @@ export function* watchGetPercentage() {
         sagaTemplates.withErrorHandlingAndLoading<GetPercentageAction>(
             handleGetPercentage,
             getPercentageRequest,
-            getPersonsFailure,
+            getPercentageFailure,
         ),
     )
 }

@@ -6,7 +6,7 @@ import React, {
     useState,
 } from 'react'
 import { DemographyState } from '../../entities/demography/model'
-import { Button, SettingsGroup, SizedBox } from '../../shared/ui'
+import { Button, FlexRow, SettingsGroup, SizedBox } from '../../shared/ui'
 import { Navbar } from '../ui/NavBar'
 
 type DemographyScreenViewProps = {
@@ -54,7 +54,7 @@ export const DemographyScreenView: FC<DemographyScreenViewProps> = ({
                             onChange={(e) => setNationality(e.target.value)}
                             value={nationality}
                         />
-                        <label htmlFor="nat">Name</label>
+                        <label htmlFor="nat">Nationality</label>
                     </div>
 
                     <div className="input-field col s12">
@@ -66,17 +66,30 @@ export const DemographyScreenView: FC<DemographyScreenViewProps> = ({
                         </select>
                     </div>
 
-                    <div className="row">
-                        <Button
-                            style={{
-                                marginRight: 'auto',
-                                marginBottom: '1rem',
-                            }}
-                            onClick={}>
-                            Calculate
-                        </Button>
+                    <div className="col s12">
+                        <FlexRow>
+                            <Button
+                                style={{
+                                    marginRight: 'auto',
+                                    marginBottom: '1rem',
+                                }}
+                                onClick={(event) =>
+                                    onPercentageClick(
+                                        nationality,
+                                        // @ts-ignore
+                                        hairColorRef.current.value,
+                                    )(event)
+                                }>
+                                Calculate
+                            </Button>
 
-                        <span>Result: {demographyState.percentage}</span>
+                            <span>
+                                Result:{' '}
+                                {demographyState.percentage
+                                    ? demographyState.percentage
+                                    : 'none'}
+                            </span>
+                        </FlexRow>
                     </div>
                 </SettingsGroup>
 
@@ -94,16 +107,29 @@ export const DemographyScreenView: FC<DemographyScreenViewProps> = ({
                         </select>
                     </div>
 
-                    <div className="row">
-                        <Button
-                            style={{
-                                marginRight: 'auto',
-                                marginBottom: '1rem',
-                            }}>
-                            Calculate
-                        </Button>
+                    <div className="col s12">
+                        <FlexRow>
+                            <Button
+                                onClick={(event) =>
+                                    // @ts-ignore
+                                    onAmountClick(hairColorRef1.current.value)(
+                                        event,
+                                    )
+                                }
+                                style={{
+                                    marginRight: 'auto',
+                                    marginBottom: '1rem',
+                                }}>
+                                Calculate
+                            </Button>
 
-                        <span>Result: {demographyState.amount}</span>
+                            <span>
+                                Result:{' '}
+                                {demographyState.amount
+                                    ? demographyState.amount
+                                    : 'none'}
+                            </span>
+                        </FlexRow>
                     </div>
                 </SettingsGroup>
             </div>

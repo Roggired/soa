@@ -9,22 +9,22 @@ const parser = new XMLParser()
 
 export function* handleGetPercentage(action: GetPercentageAction) {
     const response: AxiosResponse = yield call(apiCaller, {
-        route: `/nationality/${action.payload.nationality}/percentage/${action.payload.hairColor}`,
+        route: `/demography/nationality/${action.payload.nationality}/percentage/${action.payload.hairColor}`,
         method: 'POST',
         service: 'DEMOGRAPHY',
     })
 
-    console.log(parser.parse(response.data))
-    // yield put(getPercentageSuccess())
+    const res = parser.parse(response.data)
+    yield put(getPercentageSuccess(res.ResponseDouble.payload))
 }
 
 export function* handleGetAmount(action: GetAmountAction) {
     const response: AxiosResponse = yield call(apiCaller, {
-        route: `/hair-color/${action.payload.hairColor}`,
+        route: `/demography/hair-color/${action.payload.hairColor}`,
         service: 'DEMOGRAPHY',
         method: 'POST',
     })
 
-    console.log(parser.parse(response.data))
-    // yield put(getAmountSuccess())
+    const res = parser.parse(response.data)
+    yield put(getAmountSuccess(res.ResponseInteger.payload))
 }
