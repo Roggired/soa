@@ -27,13 +27,13 @@ const l = [
 ]
 
 type NavbarProps = {
-    readonly links: {
+    readonly links?: {
         name: string
         route: string
     }[]
 }
 
-export const Navbar: FC<NavbarProps> = ({ links }) => {
+export const Navbar: FC<NavbarProps> = ({ links = [] }) => {
     return (
         <nav>
             <div className="nav-wrapper">

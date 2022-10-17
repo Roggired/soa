@@ -1,10 +1,11 @@
 import React, { MouseEventHandler, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { personModel } from '../../entities/person'
+import { ROOT } from '../../shared/lib/routing/routes'
 import { EditorScreenView } from './ui'
 import { useHistory, useLocation } from 'react-router-dom'
 import { Color, Person } from '../../entities/person/lib'
-import { failToast } from '../../shared/lib/toasts'
+import { failToast, successToast } from '../../shared/lib/toasts'
 
 const emptyPerson = (): Person => ({
     id: 0,
@@ -72,9 +73,19 @@ export const EditorScreenContainer = () => {
             }
 
             if (mode === 'new') {
-                dispatch(personModel.actions.createPerson(person, history))
+                dispatch(
+                    personModel.actions.createPerson(person, () => {
+                        successToast('Person successfully created')
+                        history.push(ROOT)
+                    }),
+                )
             } else {
-                dispatch(personModel.actions.updatePerson(person, history))
+                dispatch(
+                    personModel.actions.updatePerson(person, () => {
+                        successToast('Person successfully updated')
+                        history.push(ROOT)
+                    }),
+                )
             }
         }
     }

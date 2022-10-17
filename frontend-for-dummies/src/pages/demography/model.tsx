@@ -12,7 +12,6 @@ export const DemographyScreenContainer = () => {
     const error = useSelector(errorModel.selectors.error(GET_PERCENTAGE))
 
     useEffect(() => {
-        console.log(error)
         if (error) {
             failToast('No persons with such nationality')
         }

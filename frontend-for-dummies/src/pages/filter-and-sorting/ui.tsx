@@ -5,14 +5,12 @@ import React, {
     useRef,
     useState,
 } from 'react'
-import { Button, FlexRow, SizedBox } from '../../shared/ui'
-import { FilterClaim } from '../../entities/person/model/store'
 import { useDispatch } from 'react-redux'
-import { personModel } from '../../entities/person'
-import { Navbar } from '../ui/NavBar'
 import { useHistory } from 'react-router-dom'
+import { FilterClaim } from '../../entities/person/model/store'
 import { ROOT } from '../../shared/lib/routing/routes'
-import { Row } from '../../shared/ui/material/material-wrappers'
+import { Button, FlexRow, SizedBox } from '../../shared/ui'
+import { Navbar } from '../ui/NavBar'
 
 type FilterSortingScreenViewProps = {
     readonly filterClaims: FilterClaim[]

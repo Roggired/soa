@@ -12,7 +12,7 @@ export interface CreatePersonAction {
     type: typeof CREATE_PERSON
     payload: {
         readonly person: Person
-        readonly history: any
+        readonly onSuccess: () => void
     }
 }
 
@@ -39,7 +39,7 @@ export interface DeletePersonAction {
     type: typeof DELETE_PERSON
     payload: {
         readonly id: number
-        readonly history: any
+        readonly onSuccess: () => void
     }
 }
 
@@ -98,7 +98,7 @@ export interface UpdatePersonAction {
     type: typeof UPDATE_PERSON
     payload: {
         readonly person: Person
-        readonly history: any
+        readonly onSuccess: () => void
     }
 }
 
@@ -159,6 +159,8 @@ export interface CreateClaimAction {
         filterClaim: FilterClaim
     }
 }
+
+// ==============================================================================
 
 export const DELETE_CLAIM = 'DELETE_CLAIM'
 

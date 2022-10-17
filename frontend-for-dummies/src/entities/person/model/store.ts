@@ -22,10 +22,13 @@ export interface PersonsState {
     filterClaims: FilterClaim[]
 }
 
+const INITIAL_PAGE_NUMBER = 0
+const PAGE_SIZE = 0
+
 export const initialState: PersonsState = {
     persons: [],
-    currentPage: 0,
-    pageSize: 3,
+    currentPage: INITIAL_PAGE_NUMBER,
+    pageSize: PAGE_SIZE,
     elementsSize: null,
     pagesTotal: null,
     filterClaims: [],
@@ -37,19 +40,6 @@ export const reducer = (
 ): PersonsState => {
     switch (action.type) {
         case GET_PERSONS_SUCCESS:
-            const oldIds = state.persons.map((p) => p.id)
-            // console.log('oldIds', oldIds)
-            const newIds = action.payload.persons.map((p) => p.id)
-            // console.log('newIds', newIds)
-            const personsToDeleteIds = oldIds.filter((id) =>
-                newIds.includes(id),
-            )
-            // console.log('personsToDelete', personsToDeleteIds)
-            const oldPersons = state.persons.filter(
-                (person) => !personsToDeleteIds.includes(person.id),
-            )
-            // console.log(oldPersons)
-
             return {
                 ...state,
                 persons: [...action.payload.persons],
@@ -68,13 +58,12 @@ export const reducer = (
                 ],
             }
         case DELETE_CLAIM:
-            const c = action.payload.filterClaim
-            console.log(c)
             return {
                 ...state,
-                currentPage: 0,
+                currentPage: INITIAL_PAGE_NUMBER,
                 filterClaims: state.filterClaims.filter(
-                    (claim) => claim.property !== c.property,
+                    (claim) =>
+                        claim.property !== action.payload.filterClaim.property,
                 ),
             }
         case SET_CURRENT_PAGE:

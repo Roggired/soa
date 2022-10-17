@@ -57,8 +57,8 @@ import { FilterClaim } from './store'
 export const createPerson = createActionWithDoubleArgs<
     CreatePersonAction,
     Person,
-    any
->(CREATE_PERSON, 'person', 'history')
+    () => void
+>(CREATE_PERSON, 'person', 'onSuccess')
 
 export const createPersonRequest =
     createActionWithNoArgs<CreatePersonRequestAction>(CREATE_PERSON_REQUEST)
@@ -74,8 +74,8 @@ export const createPersonFailure =
 export const deletePerson = createActionWithDoubleArgs<
     DeletePersonAction,
     number,
-    any
->(DELETE_PERSON, 'id', 'history')
+    () => void
+>(DELETE_PERSON, 'id', 'onSuccess')
 
 export const deletePersonRequest =
     createActionWithNoArgs<DeletePersonRequestAction>(DELETE_PERSON_REQUEST)
@@ -91,8 +91,8 @@ export const deletePersonFailure =
 export const updatePerson = createActionWithDoubleArgs<
     UpdatePersonAction,
     Person,
-    any
->(UPDATE_PERSON, 'person', 'history')
+    () => void
+>(UPDATE_PERSON, 'person', 'onSuccess')
 
 export const updatePersonRequest =
     createActionWithNoArgs<UpdatePersonRequestAction>(UPDATE_PERSON_REQUEST)

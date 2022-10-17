@@ -31,8 +31,7 @@ export const DemographyScreenView: FC<DemographyScreenViewProps> = ({
 
     useEffect(() => {
         M.updateTextFields()
-        const elems = document.querySelectorAll('select')
-        const instances = M.FormSelect.init(elems)
+        M.FormSelect.init(document.querySelectorAll('select'))
     }, [])
 
     return (

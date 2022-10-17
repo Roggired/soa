@@ -23,7 +23,6 @@ export function* handleSelectPersons(action: SelectPersonsAction) {
         method: 'POST',
     })
 
-    console.log(parser.parse(response.data))
     const res = parser.parse(response.data).ResponseListPerson
 
     let persons: Person[]

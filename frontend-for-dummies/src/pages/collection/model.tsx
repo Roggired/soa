@@ -3,13 +3,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { personModel } from '../../entities/person'
 import { Person } from '../../entities/person/lib'
+import { successToast } from '../../shared/lib/toasts'
 import { CollectionScreenView } from './ui'
-import { getPersonsSuccess } from '../../entities/person/model/actions'
 
 export const CollectionScreenContainer = () => {
     const dispatch = useDispatch()
     const personState = useSelector(personModel.selectors.all)
-    const history = useHistory()
     const [currentPage, setCurrentPage] = useState(-1)
     const [totalElements, setTotalElements] = useState(-1)
     const [persons, setPersons] = useState<Person[]>([])
@@ -23,12 +22,7 @@ export const CollectionScreenContainer = () => {
 
     useEffect(() => {
         if (currentPage >= 0) {
-            // console.log('start', currentPage * personState.pageSize)
-            // const start = currentPage * personState.pageSize
-            setPersons(
-                // personState.persons.slice(start, start + personState.pageSize),
-                personState.persons,
-            )
+            setPersons(personState.persons)
         }
     }, [currentPage, personState])
 
@@ -46,7 +40,12 @@ export const CollectionScreenContainer = () => {
         (id: number): MouseEventHandler<HTMLButtonElement> =>
         (event) => {
             event.preventDefault()
-            dispatch(personModel.actions.deletePerson(id, history))
+            dispatch(
+                personModel.actions.deletePerson(id, () => {
+                    successToast('Person successfully deleted')
+                    window.location.reload()
+                }),
+            )
         }
 
     const onNextPageClick: MouseEventHandler<HTMLButtonElement> = (event) => {
@@ -58,7 +57,6 @@ export const CollectionScreenContainer = () => {
             }
 
             setCurrentPage(futurePage)
-
             dispatch(
                 personModel.actions.getPersons(
                     personState.pageSize,

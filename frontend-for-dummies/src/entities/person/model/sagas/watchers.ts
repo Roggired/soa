@@ -7,7 +7,6 @@ import {
     deletePersonRequest,
     getPersonsFailure,
     getPersonsRequest,
-    updatePerson,
     updatePersonFailure,
     updatePersonRequest,
 } from '../actions'
@@ -21,12 +20,10 @@ import {
     UPDATE_PERSON,
     UpdatePersonAction,
 } from '../actionTypes'
-import {
-    handleCreatePerson,
-    handleDeletePerson,
-    handleGetPersons,
-    handleUpdatePerson,
-} from './workers/getAllLabs'
+import { handleCreatePerson } from './workers/createPerson'
+import { handleDeletePerson } from './workers/deletePerson'
+import { handleGetPersons } from './workers/getPersons'
+import { handleUpdatePerson } from './workers/updatePerson'
 
 export function* watchGetPersons() {
     yield takeLatest(

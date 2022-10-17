@@ -25,13 +25,14 @@ export const CollectionScreenView: FC<CollectionScreenViewProps> = ({
     const history = useHistory()
 
     useEffect(() => {
-        const elems = document.querySelectorAll('.fixed-action-btn')
-        const instances = M.FloatingActionButton.init(elems)
+        M.FloatingActionButton.init(
+            document.querySelectorAll('.fixed-action-btn'),
+        )
     }, [])
 
     return (
         <>
-            <Navbar links={[]} />
+            <Navbar />
             <div className="container" style={{ width: '90%' }}>
                 <SizedBox height="2rem" />
                 <FlexRow>
