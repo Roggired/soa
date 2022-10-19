@@ -1,16 +1,8 @@
-import React, {
-    FC,
-    MouseEventHandler,
-    useEffect,
-    useRef,
-    useState,
-} from 'react'
-import { useHistory } from 'react-router-dom'
-import { ROOT } from '../../shared/lib/routing/routes'
-import { Navbar } from '../ui/NavBar'
-import { Button, FlexRow, SizedBox } from '../../shared/ui'
+import React, {FC, MouseEventHandler, useEffect, useState,} from 'react'
 import DateTimePicker from 'react-datetime-picker'
-import { Color, Person } from '../../entities/person/lib'
+import {Color, Person} from "../../../entities/person/lib";
+import {Button, Input, SizedBox} from '../../../shared/ui';
+import {Navbar} from "../../ui/NavBar";
 
 type EditorScreenViewProps = {
     readonly onPersonSubmit: (
@@ -21,26 +13,26 @@ type EditorScreenViewProps = {
 }
 
 export const EditorScreenView: FC<EditorScreenViewProps> = ({
-    onPersonSubmit,
-    person,
-    mode,
-}) => {
-    const history = useHistory()
-
+                                                                onPersonSubmit,
+                                                                person,
+                                                                mode,
+                                                            }) => {
     const [name, setName] = useState<string>(person.name)
     const [height, setHeight] = useState<number>(person.height)
-    const [birthday, setBirthday] = useState(person.birthday)
-    const hairColorRef = useRef<HTMLSelectElement>(null)
-    const eyeColorRef = useRef<HTMLSelectElement>(null)
+    const [birthday, setBirthday] = useState<Date>(person.birthday)
+    const [hairColor, setHairColor] = useState<Color>(person.hairColor)
+    const [eyeColor, setEyeColor] = useState<Color>(person.eyeColor);
     const [nationality, setNationality] = useState<string>(person.nationality)
 
-    const [coorX, setCoorX] = useState<number>(person.coordinates.x)
-    const [coorY, setCoorY] = useState<number>(person.coordinates.y)
+    const [coordinateX, setCoordinateX] = useState<number>(person.coordinates.x)
+    const [coordinateY, setCoordinateY] = useState<number>(person.coordinates.y)
 
-    const [locX, setLocX] = useState<number>(person.location.x)
-    const [locY, setLocY] = useState<number>(person.location.y)
-    const [locZ, setLocZ] = useState<number>(person.location.z)
-    const [locName, setLocName] = useState<string>(person.location.name)
+    const [locationX, setLocationX] = useState<number>(person.location.x)
+    const [locationY, setLocationY] = useState<number>(person.location.y)
+    const [locationZ, setLocationZ] = useState<number>(person.location.z)
+    const [locationName, setLocationName] = useState<string>(person.location.name)
+
+    const isDisabled = mode === 'view'
 
     useEffect(() => {
         M.updateTextFields()
@@ -50,68 +42,38 @@ export const EditorScreenView: FC<EditorScreenViewProps> = ({
 
     return (
         <>
-            <Navbar links={[]} />
+            <Navbar/>
             <div className="container">
-                <SizedBox height="2rem" />
+                <SizedBox height="2rem"/>
                 <p>Person</p>
                 <div className="col s12">
                     <div className="row">
-                        <div className="input-field col s6">
-                            <input
-                                id="name"
-                                disabled={mode === 'view'}
-                                type="text"
-                                onChange={(e) => setName(e.target.value)}
-                                value={name}
-                            />
-                            <label htmlFor="name">Name</label>
-                        </div>
-                        <div className="input-field col s6">
-                            <input
-                                id="height"
-                                type="number"
-                                disabled={mode === 'view'}
-                                value={height}
-                                onChange={(event) =>
-                                    setHeight(+event.target.value)
-                                }
-                            />
-                            <label htmlFor="height">Height</label>
-                        </div>
+                        <Input onChange={e => setName(e.target.value)} value={name} label="Name" disabled={isDisabled}/>
+                        <Input onChange={e => setHeight(+e.target.value)} type="number" value={height} label="Height" disabled={isDisabled}/>
                     </div>
 
                     <div className="row">
                         <div className="col s6 valign-wrapper">
                             <span className="col s3">Birthday: </span>
                             <DateTimePicker
-                                disabled={mode === 'view'}
+                                disabled={isDisabled}
                                 className="col s9"
                                 onChange={setBirthday}
                                 value={birthday}
                             />
                         </div>
-                        <div className="col s6 input-field">
-                            <input
-                                id="nationality"
-                                type="text"
-                                disabled={mode === 'view'}
-                                value={nationality}
-                                onChange={(event) =>
-                                    setNationality(event.target.value)
-                                }
-                            />
-                            <label htmlFor="nationality">Nationality</label>
-                        </div>
+
+                        <Input onChange={e => setNationality(e)} value={nationality} label="Nationality" disabled={isDisabled}/>
                     </div>
 
                     <div className="row">
                         <div className="input-field col s6">
                             <select
-                                ref={hairColorRef}
-                                disabled={mode === 'view'}>
+                                value={hairColor}
+                                disabled={isDisabled}>
                                 <option
                                     selected={person.hairColor + 1 === 1}
-                                    value="1">
+                                    value="">
                                     GREEN
                                 </option>
                                 <option
@@ -199,8 +161,8 @@ export const EditorScreenView: FC<EditorScreenViewProps> = ({
                                 id="coorX"
                                 disabled={mode === 'view'}
                                 type="number"
-                                onChange={(e) => setCoorX(+e.target.value)}
-                                value={coorX}
+                                onChange={(e) => setCoordinateX(+e.target.value)}
+                                value={coordinateX}
                             />
                             <label htmlFor="coorX">x</label>
                         </div>
@@ -209,8 +171,8 @@ export const EditorScreenView: FC<EditorScreenViewProps> = ({
                                 id="coorY"
                                 disabled={mode === 'view'}
                                 type="number"
-                                onChange={(e) => setCoorY(+e.target.value)}
-                                value={coorY}
+                                onChange={(e) => setCoordinateY(+e.target.value)}
+                                value={coordinateY}
                             />
                             <label htmlFor="coorY">y</label>
                         </div>
@@ -223,8 +185,8 @@ export const EditorScreenView: FC<EditorScreenViewProps> = ({
                                 id="locX"
                                 disabled={mode === 'view'}
                                 type="number"
-                                onChange={(e) => setLocX(+e.target.value)}
-                                value={locX}
+                                onChange={(e) => setLocationX(+e.target.value)}
+                                value={locationX}
                             />
                             <label htmlFor="locX">x</label>
                         </div>
@@ -233,8 +195,8 @@ export const EditorScreenView: FC<EditorScreenViewProps> = ({
                                 id="locY"
                                 disabled={mode === 'view'}
                                 type="number"
-                                onChange={(e) => setLocY(+e.target.value)}
-                                value={locY}
+                                onChange={(e) => setLocationY(+e.target.value)}
+                                value={locationY}
                             />
                             <label htmlFor="locY">y</label>
                         </div>
@@ -246,8 +208,8 @@ export const EditorScreenView: FC<EditorScreenViewProps> = ({
                                 id="z"
                                 type="number"
                                 disabled={mode === 'view'}
-                                onChange={(e) => setLocZ(+e.target.value)}
-                                value={locZ}
+                                onChange={(e) => setLocationZ(+e.target.value)}
+                                value={locationZ}
                             />
                             <label htmlFor="z">z</label>
                         </div>
@@ -256,8 +218,8 @@ export const EditorScreenView: FC<EditorScreenViewProps> = ({
                                 id="locName"
                                 disabled={mode === 'view'}
                                 type="text"
-                                onChange={(e) => setLocName(e.target.value)}
-                                value={locName}
+                                onChange={(e) => setLocationName(e.target.value)}
+                                value={locationName}
                             />
                             <label htmlFor="locName">Name</label>
                         </div>
@@ -273,7 +235,7 @@ export const EditorScreenView: FC<EditorScreenViewProps> = ({
 
                         {mode !== 'view' && (
                             <Button
-                                style={{ marginLeft: 'auto' }}
+                                style={{marginLeft: 'auto'}}
                                 onClick={(event) =>
                                     onPersonSubmit({
                                         nationality,
@@ -281,28 +243,26 @@ export const EditorScreenView: FC<EditorScreenViewProps> = ({
                                         name,
                                         creationDate: person.creationDate,
                                         coordinates: {
-                                            x: coorX,
-                                            y: coorY,
+                                            x: coordinateX,
+                                            y: coordinateY,
                                         },
                                         birthday,
                                         height,
-                                        // @ts-ignore
                                         eyeColor:
                                             Color[
-                                                // @ts-ignore
-                                                +eyeColorRef.current.value - 1
-                                            ],
+                                            +eyeColorRef.current.value - 1
+                                                ],
                                         // @ts-ignore
                                         hairColor:
                                             Color[
                                                 // @ts-ignore
-                                                +hairColorRef.current.value - 1
-                                            ].toString(),
+                                            +hairColorRef.current.value - 1
+                                                ].toString(),
                                         location: {
-                                            x: locX,
-                                            y: locY,
-                                            z: locZ,
-                                            name: locName,
+                                            x: locationX,
+                                            y: locationY,
+                                            z: locationZ,
+                                            name: locationName,
                                         },
                                     })(event)
                                 }>
@@ -310,7 +270,7 @@ export const EditorScreenView: FC<EditorScreenViewProps> = ({
                             </Button>
                         )}
                     </FlexRow>
-                    <SizedBox height="3rem" />
+                    <SizedBox height="3rem"/>
                 </div>
             </div>
         </>

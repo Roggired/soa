@@ -19,7 +19,6 @@ const GlobalStyles = createGlobalStyle`
     background-color: #f4f4f4;
   }
 
-  // TODO Что-то со стилями...
   #root {
     min-height: 100vh;
     display: flex;

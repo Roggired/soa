@@ -1,22 +1,14 @@
 import React, { ChangeEventHandler, FC, useEffect } from 'react'
 
 type SelectProps = {
-    readonly id: string
-
-    readonly defaultValue: string
     readonly label: string
-
     readonly onChange?: ChangeEventHandler<HTMLSelectElement>
-    children: JSX.Element
 }
 
-export const Select: FC<SelectProps> = ({
-    id,
-    defaultValue,
+export const Select = ({
     label,
     onChange = () => {},
-    children,
-}) => {
+}: SelectProps) => {
     useEffect(() => {
         const elem = document.getElementById(id)
         M.FormSelect.init(elem as any)

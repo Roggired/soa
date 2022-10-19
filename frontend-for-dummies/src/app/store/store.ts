@@ -23,7 +23,6 @@ export const configureStore = (
     const composeEnhancers =
         (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
-    // TODO Env set to true
     const store = createStore(
         rootReducer,
         initialState,
