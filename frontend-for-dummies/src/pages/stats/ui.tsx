@@ -1,8 +1,15 @@
 import React, { FC, MouseEventHandler, useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
+import { Person } from '../../entities/person/lib'
 import { StatsState } from '../../entities/stats/model'
 import { EDITOR } from '../../shared/lib/routing/routes'
-import { Button, FlexRow, SettingsGroup, SizedBox } from '../../shared/ui'
+import {
+    Button,
+    FlexRow,
+    Input,
+    SettingsGroup,
+    SizedBox,
+} from '../../shared/ui'
 import { Navbar } from '../ui/NavBar'
 
 type StatsScreenViewProps = {
@@ -14,6 +21,9 @@ type StatsScreenViewProps = {
     readonly onUnderAmount: (
         targetHeight: number,
     ) => MouseEventHandler<HTMLButtonElement>
+    readonly onPersonViewClick: (
+        person: Person,
+    ) => MouseEventHandler<HTMLButtonElement>
 }
 
 export const StatsScreenView: FC<StatsScreenViewProps> = ({
@@ -21,27 +31,25 @@ export const StatsScreenView: FC<StatsScreenViewProps> = ({
     onSelectByName,
     onUnderAmount,
     onMeanHeight,
+    onPersonViewClick,
 }) => {
-    const [namePrefix, setNamePrefix] = useState('')
+    const [namePrefix, setNamePrefix] = useState<string>('')
     const [targetHeight, setTargetHeight] = useState<number>(0)
 
-    const history = useHistory()
-
     useEffect(() => {
+        M.AutoInit()
         M.updateTextFields()
-        const elems = document.querySelectorAll('select')
-        const instances = M.FormSelect.init(elems)
     }, [])
 
     return (
         <>
-            <Navbar links={[]} />
+            <Navbar />
             <div className="container">
                 <SizedBox height={'2rem'} />
 
                 <SettingsGroup
                     title={'Mean height'}
-                    description={'Calculate mean height'}>
+                    description={'Calculate mean height by all persons'}>
                     <div className="col s12">
                         <FlexRow alignItems="center">
                             <Button
@@ -50,7 +58,7 @@ export const StatsScreenView: FC<StatsScreenViewProps> = ({
                                     marginBottom: '1rem',
                                     marginTop: '1rem',
                                 }}
-                                onClick={(event) => onMeanHeight(event)}>
+                                onClick={onMeanHeight}>
                                 Calculate
                             </Button>
 
@@ -67,17 +75,13 @@ export const StatsScreenView: FC<StatsScreenViewProps> = ({
                     description={
                         'Enter height and calculate amount of persons'
                     }>
-                    <div
-                        className="col s12 input-field"
-                        style={{ marginTop: '1rem' }}>
-                        <input
-                            id="targetHeight"
-                            type="number"
-                            onChange={(e) => setTargetHeight(+e.target.value)}
-                            value={targetHeight}
-                        />
-                        <label htmlFor="targetHeight">Target height</label>
-                    </div>
+                    <Input
+                        onChange={(e) => setTargetHeight(+e.target.value)}
+                        value={targetHeight}
+                        label={'Target height'}
+                        type="number"
+                        classNames="col s12"
+                    />
 
                     <div className="col s12">
                         <FlexRow alignItems="center">
@@ -94,8 +98,8 @@ export const StatsScreenView: FC<StatsScreenViewProps> = ({
 
                             <span>
                                 Result:{' '}
-                                {state.underHeightAmount
-                                    ? state.underHeightAmount
+                                {state.underHeightAmount != null
+                                    ? state.underHeightAmount + ' persons'
                                     : 'none'}
                             </span>
                         </FlexRow>
@@ -107,17 +111,12 @@ export const StatsScreenView: FC<StatsScreenViewProps> = ({
                     description={
                         'Choose name prefix and check all persons with it'
                     }>
-                    <div
-                        className="col s12 input-field"
-                        style={{ marginTop: '1rem' }}>
-                        <input
-                            id="select"
-                            type="text"
-                            onChange={(e) => setNamePrefix(e.target.value)}
-                            value={namePrefix}
-                        />
-                        <label htmlFor="select">Name prefix</label>
-                    </div>
+                    <Input
+                        onChange={(e) => setNamePrefix(e.target.value)}
+                        value={namePrefix}
+                        label="Name prefix"
+                        classNames="col s12"
+                    />
 
                     <div className="col s12">
                         <FlexRow alignItems="center">
@@ -132,7 +131,7 @@ export const StatsScreenView: FC<StatsScreenViewProps> = ({
                                 Calculate
                             </Button>
 
-                            <span>Result: {state.persons.length}</span>
+                            <span>Result: {state.persons.length} persons</span>
                         </FlexRow>
                     </div>
 
@@ -151,15 +150,7 @@ export const StatsScreenView: FC<StatsScreenViewProps> = ({
                                     <td>{person.name}</td>
                                     <td>
                                         <Button
-                                            onClick={() => {
-                                                history.push({
-                                                    pathname: EDITOR,
-                                                    state: {
-                                                        person: person,
-                                                        mode: 'view',
-                                                    },
-                                                })
-                                            }}>
+                                            onClick={onPersonViewClick(person)}>
                                             <i className="material-icons">
                                                 more
                                             </i>

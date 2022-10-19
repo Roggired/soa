@@ -2,25 +2,31 @@ import React, { ChangeEventHandler, FC, useEffect } from 'react'
 
 type SelectProps = {
     readonly label: string
-    readonly onChange?: ChangeEventHandler<HTMLSelectElement>
+    readonly value: string
+    readonly options: string[]
+    readonly onChange: ChangeEventHandler<HTMLSelectElement>
+    readonly disabled?: boolean
+    readonly classNames?: string
 }
 
 export const Select = ({
     label,
-    onChange = () => {},
-}: SelectProps) => {
+    onChange,
+    options,
+    value,
+    disabled = false,
+    classNames = 'col s6',
+}: SelectProps): JSX.Element => {
     useEffect(() => {
-        const elem = document.getElementById(id)
-        M.FormSelect.init(elem as any)
+        M.AutoInit()
     }, [])
 
     return (
-        <div className="input-field">
-            <select id={id} defaultValue="" onChange={onChange}>
-                <option value="" disabled>
-                    {defaultValue}
-                </option>
-                {children}
+        <div className={'input-field ' + classNames}>
+            <select value={value} onChange={onChange} disabled={disabled}>
+                {options.map((option) => (
+                    <option value={option}>{option}</option>
+                ))}
             </select>
             <label>{label}</label>
         </div>

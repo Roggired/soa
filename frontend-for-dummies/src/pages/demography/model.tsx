@@ -1,5 +1,6 @@
 import React, { MouseEventHandler, useEffect } from 'react'
 import { GET_PERCENTAGE } from '../../entities/demography/model/actionTypes'
+import { Color } from '../../entities/person/lib'
 import { failToast } from '../../shared/lib/toasts'
 import { DemographyScreenView } from './ui'
 import { useDispatch, useSelector } from 'react-redux'
@@ -12,15 +13,21 @@ export const DemographyScreenContainer = () => {
     const error = useSelector(errorModel.selectors.error(GET_PERCENTAGE))
 
     useEffect(() => {
+        dispatch(demographyModel.actions.clearAllDemographyState())
+    }, [])
+
+    useEffect(() => {
         if (error) {
             failToast('No persons with such nationality')
+            dispatch(errorModel.actions.clearErrors())
+            dispatch(demographyModel.actions.clearDemographyState())
         }
     }, [error])
 
     const onPercentageClick =
         (
             nationality: string,
-            hairColor: string,
+            hairColor: Color,
         ): MouseEventHandler<HTMLButtonElement> =>
         (event) => {
             event.preventDefault()

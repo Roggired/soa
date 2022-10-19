@@ -6,17 +6,25 @@ import React, {
     useState,
 } from 'react'
 import { DemographyState } from '../../entities/demography/model'
-import { Button, FlexRow, SettingsGroup, SizedBox } from '../../shared/ui'
+import { Color } from '../../entities/person/lib'
+import {
+    Button,
+    FlexRow,
+    Input,
+    Select,
+    SettingsGroup,
+    SizedBox,
+} from '../../shared/ui'
 import { Navbar } from '../ui/NavBar'
 
 type DemographyScreenViewProps = {
     readonly demographyState: DemographyState
     readonly onPercentageClick: (
         nationality: string,
-        hairColor: string,
+        hairColor: Color,
     ) => MouseEventHandler<HTMLButtonElement>
     readonly onAmountClick: (
-        hairColor: string,
+        hairColor: Color,
     ) => MouseEventHandler<HTMLButtonElement>
 }
 
@@ -26,44 +34,37 @@ export const DemographyScreenView: FC<DemographyScreenViewProps> = ({
     onAmountClick,
 }) => {
     const [nationality, setNationality] = useState('')
-    const hairColorRef = useRef<HTMLSelectElement>(null)
-    const hairColorRef1 = useRef<HTMLSelectElement>(null)
+    const [hairColor, setHairColor] = useState<Color>(Color.GREEN)
+    const [byHairColor, setByHairColor] = useState<Color>(Color.GREEN)
 
     useEffect(() => {
-        M.updateTextFields()
         M.FormSelect.init(document.querySelectorAll('select'))
     }, [])
 
     return (
         <>
-            <Navbar links={[]} />
+            <Navbar />
             <div className="container">
                 <SizedBox height={'2rem'} />
                 <SettingsGroup
                     title={'Percentage'}
                     description={
-                        'Choose hair color and nationality to check percentage of such people'
+                        'Choose hair color and nationality to check percentage of such persons'
                     }>
-                    <div
-                        className="col s12 input-field"
-                        style={{ marginTop: '1rem' }}>
-                        <input
-                            id="nat"
-                            type="text"
-                            onChange={(e) => setNationality(e.target.value)}
-                            value={nationality}
-                        />
-                        <label htmlFor="nat">Nationality</label>
-                    </div>
+                    <Input
+                        onChange={(e) => setNationality(e.target.value)}
+                        value={nationality}
+                        label="Nationality"
+                        classNames="col s12"
+                    />
 
-                    <div className="input-field col s12">
-                        <select ref={hairColorRef}>
-                            <option value="GREEN">GREEN</option>
-                            <option value="RED">RED</option>
-                            <option value="YELLOW">YELLOW</option>
-                            <option value="ORANGE">ORANGE</option>
-                        </select>
-                    </div>
+                    <Select
+                        label="Hair color"
+                        value={hairColor}
+                        options={Object.keys(Color)}
+                        onChange={(e) => setHairColor(e.target.value as Color)}
+                        classNames="col s12"
+                    />
 
                     <div className="col s12">
                         <FlexRow alignItems="center">
@@ -75,8 +76,7 @@ export const DemographyScreenView: FC<DemographyScreenViewProps> = ({
                                 onClick={(event) =>
                                     onPercentageClick(
                                         nationality,
-                                        // @ts-ignore
-                                        hairColorRef.current.value,
+                                        hairColor,
                                     )(event)
                                 }>
                                 Calculate
@@ -84,8 +84,8 @@ export const DemographyScreenView: FC<DemographyScreenViewProps> = ({
 
                             <span>
                                 Result:{' '}
-                                {demographyState.percentage
-                                    ? demographyState.percentage
+                                {demographyState.percentage !== null
+                                    ? demographyState.percentage + ' %'
                                     : 'none'}
                             </span>
                         </FlexRow>
@@ -95,25 +95,21 @@ export const DemographyScreenView: FC<DemographyScreenViewProps> = ({
                 <SettingsGroup
                     title="By hair color"
                     description="Calculate amount by hair color">
-                    <div
-                        className="input-field col s12"
-                        style={{ marginTop: '1rem' }}>
-                        <select ref={hairColorRef1}>
-                            <option value="GREEN">GREEN</option>
-                            <option value="RED">RED</option>
-                            <option value="YELLOW">YELLOW</option>
-                            <option value="ORANGE">ORANGE</option>
-                        </select>
-                    </div>
+                    <Select
+                        label="Hair color"
+                        value={byHairColor}
+                        options={Object.keys(Color)}
+                        onChange={(e) =>
+                            setByHairColor(e.target.value as Color)
+                        }
+                        classNames="col s12"
+                    />
 
                     <div className="col s12">
                         <FlexRow alignItems="center">
                             <Button
                                 onClick={(event) =>
-                                    // @ts-ignore
-                                    onAmountClick(hairColorRef1.current.value)(
-                                        event,
-                                    )
+                                    onAmountClick(byHairColor)(event)
                                 }
                                 style={{
                                     marginRight: 'auto',
@@ -124,8 +120,8 @@ export const DemographyScreenView: FC<DemographyScreenViewProps> = ({
 
                             <span>
                                 Result:{' '}
-                                {demographyState.amount
-                                    ? demographyState.amount
+                                {demographyState.amount !== null
+                                    ? demographyState.amount + ' persons'
                                     : 'none'}
                             </span>
                         </FlexRow>

@@ -85,6 +85,12 @@ export interface GetUnderHeightFailureAction extends ErrorAction {
 
 // ==============================================================================
 
+export const CLEAR_ALL_STATS_STATE = 'CLEAR_ALL_STATS_STATE'
+
+export interface ClearAllStatsState {
+    type: typeof CLEAR_ALL_STATS_STATE
+}
+
 export type StatsActions =
     | SelectPersonsAction
     | SelectPersonsRequestAction
@@ -98,3 +104,4 @@ export type StatsActions =
     | GetUnderHeightRequestAction
     | GetUnderHeightSuccessAction
     | GetUnderHeightFailureAction
+    | ClearAllStatsState

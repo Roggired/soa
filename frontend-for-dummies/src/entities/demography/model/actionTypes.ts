@@ -57,6 +57,18 @@ export interface GetAmountFailureAction extends ErrorAction {
     type: typeof GET_AMOUNT_FAILURE
 }
 
+export const CLEAR_DEMOGRAPHY_STATE = 'CLEAR_DEMOGRAPHY_STATE'
+
+export interface ClearDemographyPercentageState {
+    type: typeof CLEAR_DEMOGRAPHY_STATE
+}
+
+export const CLEAR_DEMOGRAPHY_ALL_STATE = 'CLEAR_DEMOGRAPHY_ALL_STATE'
+
+export interface ClearAllDemographyState {
+    type: typeof CLEAR_DEMOGRAPHY_ALL_STATE
+}
+
 // ==============================================================================
 
 export type DemographyActions =
@@ -68,3 +80,5 @@ export type DemographyActions =
     | GetPercentageRequestAction
     | GetPercentageSuccessAction
     | GetPercentageFailureAction
+    | ClearDemographyPercentageState
+    | ClearAllDemographyState

@@ -21,26 +21,26 @@ const val TRUSTSTORE_PASS_ENV = "TRUSTSTORE_PASS"
 class RetrofitConfig {
     @Produces
     fun collectionApi(): CollectionApi {
-        val keyStore = KeyStore.getInstance(getTruststoreFile(), getTruststorePass())
-
-        val trustManagerFactory: TrustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm())
-        trustManagerFactory.init(keyStore)
-        val trustManagers: Array<TrustManager> = trustManagerFactory.trustManagers
-        check(!(trustManagers.size != 1 || trustManagers[0] !is X509TrustManager)) {
-            ("Unexpected default trust managers:"
-                    + trustManagers.contentToString())
-        }
-        val x509TrustManager = trustManagers[0] as X509TrustManager
-
-        val sslContext: SSLContext = SSLContext.getInstance("TLS")
-        sslContext.init(null, arrayOf(x509TrustManager), null)
-        val sslSocketFactory: SSLSocketFactory = sslContext.socketFactory
+//        val keyStore = KeyStore.getInstance(getTruststoreFile(), getTruststorePass())
+//
+//        val trustManagerFactory: TrustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm())
+//        trustManagerFactory.init(keyStore)
+//        val trustManagers: Array<TrustManager> = trustManagerFactory.trustManagers
+//        check(!(trustManagers.size != 1 || trustManagers[0] !is X509TrustManager)) {
+//            ("Unexpected default trust managers:"
+//                    + trustManagers.contentToString())
+//        }
+//        val x509TrustManager = trustManagers[0] as X509TrustManager
+//
+//        val sslContext: SSLContext = SSLContext.getInstance("TLS")
+//        sslContext.init(null, arrayOf(x509TrustManager), null)
+//        val sslSocketFactory: SSLSocketFactory = sslContext.socketFactory
 
         return Retrofit.Builder()
             .client(
                 OkHttpClient.Builder()
                     .addInterceptor(HttpLoggingInterceptor().apply { setLevel(HttpLoggingInterceptor.Level.BODY) })
-                    .sslSocketFactory(sslSocketFactory, x509TrustManager)
+//                    .sslSocketFactory(sslSocketFactory, x509TrustManager)
                     .build()
             )
             .baseUrl(getCollectionServiceBaseUrl())

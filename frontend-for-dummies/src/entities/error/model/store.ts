@@ -11,6 +11,8 @@ export const reducer = (
     state: ErrorState = {},
     action: ErrorStateActions,
 ): ErrorState => {
+    if (action.type === CLEAR_ERRORS) return {}
+
     const matches = getErrorMatches(action.type)
     if (!matches) return state
 

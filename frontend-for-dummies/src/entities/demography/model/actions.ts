@@ -15,6 +15,10 @@ import {
     GetPercentageRequestAction,
     GetPercentageSuccessAction,
     GET_AMOUNT_FAILURE,
+    ClearDemographyPercentageState,
+    CLEAR_DEMOGRAPHY_STATE,
+    ClearAllDemographyState,
+    CLEAR_DEMOGRAPHY_ALL_STATE,
 } from './actionTypes'
 import {
     createActionWithDoubleArgs,
@@ -58,3 +62,11 @@ export const getAmountFailure =
     createFailureAction<GetAmountFailureAction>(GET_AMOUNT_FAILURE)
 
 // =============================================================================
+
+export const clearDemographyState =
+    createActionWithNoArgs<ClearDemographyPercentageState>(
+        CLEAR_DEMOGRAPHY_STATE,
+    )
+
+export const clearAllDemographyState =
+    createActionWithNoArgs<ClearAllDemographyState>(CLEAR_DEMOGRAPHY_ALL_STATE)

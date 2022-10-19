@@ -1,12 +1,16 @@
-import React, { MouseEventHandler } from 'react'
+import React, { MouseEventHandler, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useHistory } from 'react-router-dom'
+import { Person } from '../../entities/person/lib'
 import { statsModel } from '../../entities/stats'
+import { EDITOR } from '../../shared/lib/routing/routes'
 import { failToast } from '../../shared/lib/toasts'
 import { StatsScreenView } from './ui'
 
 export const StatsScreenContainer = () => {
     const dispatch = useDispatch()
     const state = useSelector(statsModel.selectors.all)
+    const history = useHistory()
 
     const onSelectByName =
         (namePrefix: string): MouseEventHandler<HTMLButtonElement> =>
@@ -38,9 +42,23 @@ export const StatsScreenContainer = () => {
             dispatch(statsModel.actions.getUnderHeight(targetHeight))
         }
 
+    const onPersonViewClick =
+        (person: Person): MouseEventHandler<HTMLButtonElement> =>
+        (event) => {
+            event.preventDefault()
+            history.push({
+                pathname: EDITOR,
+                state: {
+                    person: person,
+                    mode: 'view',
+                },
+            })
+        }
+
     return (
         <StatsScreenView
             state={state}
+            onPersonViewClick={onPersonViewClick}
             onSelectByName={onSelectByName}
             onMeanHeight={onMeanHeight}
             onUnderAmount={onUnderAmount}

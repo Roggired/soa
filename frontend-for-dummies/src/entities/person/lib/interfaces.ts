@@ -1,11 +1,8 @@
 export enum Color {
-    GREEN,
-    YELLOW,
-    ORANGE,
-    RED,
-    BLACK,
-    BLUE,
-    BROWN,
+    GREEN = 'GREEN',
+    YELLOW = 'YELLOW',
+    ORANGE = 'ORANGE',
+    RED = 'RED',
 }
 
 export interface Location {

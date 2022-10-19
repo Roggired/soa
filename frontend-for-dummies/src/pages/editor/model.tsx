@@ -13,8 +13,8 @@ const emptyPerson = (): Person => ({
     creationDate: new Date(),
     height: 0,
     birthday: new Date(),
-    eyeColor: Color.GREEN.valueOf(),
-    hairColor: Color.GREEN.valueOf(),
+    eyeColor: Color.GREEN,
+    hairColor: Color.GREEN,
     nationality: '',
     location: {
         x: 0,
@@ -90,10 +90,16 @@ export const EditorScreenContainer = () => {
         }
     }
 
+    const onBackButtonClick: MouseEventHandler<HTMLButtonElement> = (event) => {
+        event.preventDefault()
+        history.goBack()
+    }
+
     return (
         <EditorScreenView
             person={person ? person : emptyPerson()}
             onPersonSubmit={onPersonSubmit}
+            onBackButtonClick={onBackButtonClick}
             mode={mode}
         />
     )

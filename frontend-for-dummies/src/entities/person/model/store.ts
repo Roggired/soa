@@ -23,7 +23,7 @@ export interface PersonsState {
 }
 
 const INITIAL_PAGE_NUMBER = 0
-const PAGE_SIZE = 0
+const PAGE_SIZE = 2
 
 export const initialState: PersonsState = {
     persons: [],

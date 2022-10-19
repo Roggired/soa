@@ -30,6 +30,8 @@ import {
     GET_UNDER_HEIGHT_FAILURE,
     GET_MEAN_HEIGHT_REQUEST,
     GET_MEAN_HEIGHT_FAILURE,
+    ClearAllStatsState,
+    CLEAR_ALL_STATS_STATE,
 } from './actionTypes'
 
 export const selectPersons = createActionWithSingleArg<
@@ -85,3 +87,7 @@ export const getUnderHeightFailure =
     createFailureAction<GetUnderHeightFailureAction>(GET_UNDER_HEIGHT_FAILURE)
 
 // =============================================================================
+
+export const clearState = createActionWithNoArgs<ClearAllStatsState>(
+    CLEAR_ALL_STATS_STATE,
+)

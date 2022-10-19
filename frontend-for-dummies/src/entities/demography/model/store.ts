@@ -1,4 +1,6 @@
 import {
+    CLEAR_DEMOGRAPHY_ALL_STATE,
+    CLEAR_DEMOGRAPHY_STATE,
     DemographyActions,
     GET_AMOUNT_SUCCESS,
     GET_PERCENTAGE_SUCCESS,
@@ -31,6 +33,13 @@ export const reducer = (
                 amount: action.payload.amount,
             }
         }
+        case CLEAR_DEMOGRAPHY_STATE:
+            return {
+                ...state,
+                percentage: initialState.percentage,
+            }
+        case CLEAR_DEMOGRAPHY_ALL_STATE:
+            return initialState
         default:
             return state
     }

@@ -3,4 +3,8 @@
 $primary-color: #64b5f6 !default;
 $secondary-color: #64b5f6 !default;
 
+.react-datetime-picker {
+  z-index: 300;
+}
+
 @import "~materialize-css/sass/materialize.scss";
