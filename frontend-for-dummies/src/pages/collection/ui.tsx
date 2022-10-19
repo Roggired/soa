@@ -105,7 +105,8 @@ export const CollectionScreenView: FC<CollectionScreenViewProps> = ({
                                     <Button
                                         onClick={() => {
                                             history.push({
-                                                pathname: EDITOR,
+                                                pathname:
+                                                    '/editor/' + person.id,
                                                 state: {
                                                     person: person,
                                                     mode: 'view',
