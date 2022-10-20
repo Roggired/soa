@@ -26,13 +26,13 @@ type StatsScreenViewProps = {
     ) => MouseEventHandler<HTMLButtonElement>
 }
 
-export const StatsScreenView: FC<StatsScreenViewProps> = ({
+export const StatsScreenView = ({
     state,
     onSelectByName,
     onUnderAmount,
     onMeanHeight,
     onPersonViewClick,
-}) => {
+}: StatsScreenViewProps): JSX.Element => {
     const [namePrefix, setNamePrefix] = useState<string>('')
     const [targetHeight, setTargetHeight] = useState<number>(0)
 

@@ -1,29 +1,37 @@
-import React, { FC, MouseEventHandler, useEffect } from 'react'
+import React, { MouseEventHandler, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
-import { Color, Person } from '../../entities/person/lib'
-import { EDITOR } from '../../shared/lib/routing/routes'
-import { Button, FlexRow, SizedBox } from '../../shared/ui'
-import { Navbar } from '../ui/NavBar'
+import { Color, Person } from '../../../entities/person/lib'
+import { FilterClaim } from '../../../entities/person/model/store'
+import { EDITOR } from '../../../shared/lib/routing/routes'
+import { Button, FlexColumn, FlexRow, SizedBox } from '../../../shared/ui'
+import { Navbar } from '../../ui/NavBar'
+import { AppliedFilters } from './AppliedFilters'
 
 type CollectionScreenViewProps = {
     readonly currentPage: number
     readonly persons: Person[]
     readonly elementsSize: number
+    readonly filters: FilterClaim[]
     readonly onDeleteClick: (id: number) => MouseEventHandler<HTMLButtonElement>
+    readonly onPersonEdit: (person: Person) => void
+    readonly onPersonView: (person: Person) => void
+    readonly onNewPersonClick: () => void
     readonly onNextPageClick: MouseEventHandler<HTMLButtonElement>
     readonly onPreviousPageClick: MouseEventHandler<HTMLButtonElement>
 }
 
-export const CollectionScreenView: FC<CollectionScreenViewProps> = ({
+export const CollectionScreenView = ({
     currentPage,
     persons,
     elementsSize,
     onDeleteClick,
     onNextPageClick,
     onPreviousPageClick,
-}) => {
-    const history = useHistory()
-
+    onNewPersonClick,
+    onPersonEdit,
+    onPersonView,
+    filters,
+}: CollectionScreenViewProps): JSX.Element => {
     useEffect(() => {
         M.FloatingActionButton.init(
             document.querySelectorAll('.fixed-action-btn'),
@@ -73,7 +81,7 @@ export const CollectionScreenView: FC<CollectionScreenViewProps> = ({
                         </tr>
                     </thead>
                     <tbody>
-                        {persons.map((person, index) => (
+                        {persons.map((person) => (
                             <tr>
                                 <td>{person.id}</td>
                                 <td>{person.name}</td>
@@ -89,30 +97,12 @@ export const CollectionScreenView: FC<CollectionScreenViewProps> = ({
                                 <td>
                                     <Button
                                         style={{ marginRight: '1px' }}
-                                        onClick={(event) => {
-                                            event.preventDefault()
-                                            history.push({
-                                                pathname: EDITOR,
-                                                state: {
-                                                    person: person,
-                                                    mode: 'edit',
-                                                },
-                                            })
-                                        }}>
+                                        onClick={() => onPersonEdit(person)}>
                                         <i className="material-icons">edit</i>
                                     </Button>
 
                                     <Button
-                                        onClick={() => {
-                                            history.push({
-                                                pathname:
-                                                    '/editor/' + person.id,
-                                                state: {
-                                                    person: person,
-                                                    mode: 'view',
-                                                },
-                                            })
-                                        }}
+                                        onClick={() => onPersonView(person)}
                                         style={{ marginRight: '1px' }}>
                                         <i className="material-icons">more</i>
                                     </Button>
@@ -125,19 +115,18 @@ export const CollectionScreenView: FC<CollectionScreenViewProps> = ({
                         ))}
                     </tbody>
                 </table>
+
+                <SizedBox height="2rem" />
+                <FlexColumn justifyContent="center" alignItems="center">
+                    {filters.length !== 0 && (
+                        <AppliedFilters filters={filters} />
+                    )}
+                </FlexColumn>
             </div>
+
             <div
                 className="fixed-action-btn"
-                onClick={(e) => {
-                    e.preventDefault()
-                    history.push({
-                        pathname: EDITOR,
-                        state: {
-                            person: null,
-                            mode: 'new',
-                        },
-                    })
-                }}>
+                onClick={() => onNewPersonClick()}>
                 <a className="btn-floating btn-large">
                     <i className="large material-icons">add</i>
                 </a>

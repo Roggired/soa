@@ -28,11 +28,11 @@ type DemographyScreenViewProps = {
     ) => MouseEventHandler<HTMLButtonElement>
 }
 
-export const DemographyScreenView: FC<DemographyScreenViewProps> = ({
+export const DemographyScreenView = ({
     demographyState,
     onPercentageClick,
     onAmountClick,
-}) => {
+}: DemographyScreenViewProps): JSX.Element => {
     const [nationality, setNationality] = useState('')
     const [hairColor, setHairColor] = useState<Color>(Color.GREEN)
     const [byHairColor, setByHairColor] = useState<Color>(Color.GREEN)

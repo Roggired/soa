@@ -29,3 +29,5 @@ export interface Person {
     readonly location: Location
     readonly nationality: string
 }
+
+export type SortingType = 'NO' | 'ASC' | 'DES'

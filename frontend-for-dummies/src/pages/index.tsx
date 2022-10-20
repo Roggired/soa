@@ -6,7 +6,7 @@ import { FilterSortingScreen } from './filter-and-sorting'
 import { DemographyScreen } from './demography'
 import { StatsScreen } from './stats'
 
-export const Routing = () => (
+export const Routing = (): JSX.Element => (
     <Switch>
         <Route exact path={routes.ROOT} component={CollectionScreen} />
         <Route path={routes.EDITOR} component={EditorScreen} />

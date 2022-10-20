@@ -3,11 +3,14 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { personModel } from '../../entities/person'
 import { Person } from '../../entities/person/lib'
+import { EDITOR, editorPathWithId } from '../../shared/lib/routing/routes'
 import { successToast } from '../../shared/lib/toasts'
 import { CollectionScreenView } from './ui'
 
 export const CollectionScreenContainer = () => {
     const dispatch = useDispatch()
+    const history = useHistory()
+
     const personState = useSelector(personModel.selectors.all)
     const [currentPage, setCurrentPage] = useState(-1)
     const [totalElements, setTotalElements] = useState(-1)
@@ -88,6 +91,36 @@ export const CollectionScreenContainer = () => {
         }
     }
 
+    const onPersonEdit = (person: Person) => {
+        history.push({
+            pathname: editorPathWithId(person.id),
+            state: {
+                person: person,
+                mode: 'edit',
+            },
+        })
+    }
+
+    const onPersonView = (person: Person) => {
+        history.push({
+            pathname: editorPathWithId(person.id),
+            state: {
+                person: person,
+                mode: 'view',
+            },
+        })
+    }
+
+    const onNewPersonClick = () => {
+        history.push({
+            pathname: EDITOR,
+            state: {
+                person: null,
+                mode: 'new',
+            },
+        })
+    }
+
     return (
         <CollectionScreenView
             currentPage={+currentPage + 1}
@@ -95,7 +128,11 @@ export const CollectionScreenContainer = () => {
             onNextPageClick={onNextPageClick}
             onPreviousPageClick={onPreviousPageClick}
             elementsSize={totalElements}
+            filters={personState.filterClaims}
             persons={persons}
+            onPersonEdit={onPersonEdit}
+            onNewPersonClick={onNewPersonClick}
+            onPersonView={onPersonView}
         />
     )
 }

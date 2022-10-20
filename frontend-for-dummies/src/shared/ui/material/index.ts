@@ -1,6 +1,4 @@
-export { Icon } from './Icon'
 export * as Materialize from './material-wrappers'
 export * from './Button'
-export { Loader } from './Loader'
 export { Select } from './Select'
 export { Input } from './Input'

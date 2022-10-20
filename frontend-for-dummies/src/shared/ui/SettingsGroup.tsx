@@ -32,11 +32,11 @@ const StyledContent = styled(Col).attrs((props) => ({
     }
 `
 
-export const SettingsGroup: FC<PropsWithChildren<SettingsGroupProps>> = ({
+export const SettingsGroup = ({
     children,
     title,
     description,
-}) => {
+}: PropsWithChildren<SettingsGroupProps>) => {
     return (
         <Materialize.Row>
             <Materialize.Col s={4}>

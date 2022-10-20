@@ -33,7 +33,7 @@ type NavbarProps = {
     }[]
 }
 
-export const Navbar: FC<NavbarProps> = ({ links = [] }) => {
+export const Navbar = ({ links = [] }: NavbarProps): JSX.Element => {
     return (
         <nav>
             <div className="nav-wrapper">

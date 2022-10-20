@@ -13,12 +13,12 @@ type EditorScreenViewProps = {
     readonly mode: string
 }
 
-export const EditorScreenView: FC<EditorScreenViewProps> = ({
+export const EditorScreenView = ({
     onBackButtonClick,
     onPersonSubmit,
     person,
     mode,
-}) => {
+}: EditorScreenViewProps): JSX.Element => {
     const isDisabled = mode === 'view'
 
     const [name, setName] = useState<string>(person.name)

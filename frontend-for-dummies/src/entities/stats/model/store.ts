@@ -1,6 +1,7 @@
 import { Person } from '../../person/lib'
 import {
-    CLEAR_ALL_STATS_STATE,
+    CLEAR_SELECTED_PERSONS_STATS_STATE,
+    CLEAR_UNDER_HEIGHT_STATE,
     GET_MEAN_HEIGHT_SUCCESS,
     GET_UNDER_HEIGHT_SUCCESS,
     SELECT_PERSONS_SUCCESS,
@@ -39,8 +40,16 @@ export const reducer = (
                 ...state,
                 persons: action.payload.persons,
             }
-        case CLEAR_ALL_STATS_STATE:
-            return initialState
+        case CLEAR_SELECTED_PERSONS_STATS_STATE:
+            return {
+                ...state,
+                persons: [],
+            }
+        case CLEAR_UNDER_HEIGHT_STATE:
+            return {
+                ...state,
+                underHeightAmount: null,
+            }
         default:
             return state
     }

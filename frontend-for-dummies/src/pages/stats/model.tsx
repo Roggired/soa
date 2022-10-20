@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { Person } from '../../entities/person/lib'
 import { statsModel } from '../../entities/stats'
-import { EDITOR } from '../../shared/lib/routing/routes'
+import { EDITOR, editorPathWithId } from '../../shared/lib/routing/routes'
 import { failToast } from '../../shared/lib/toasts'
 import { StatsScreenView } from './ui'
 
@@ -18,6 +18,7 @@ export const StatsScreenContainer = () => {
             event.preventDefault()
             if (namePrefix === '') {
                 failToast('Prefix cant be empty')
+                dispatch(statsModel.actions.clearSelectedPersonsState())
                 return
             }
 
@@ -35,7 +36,8 @@ export const StatsScreenContainer = () => {
             event.preventDefault()
 
             if (targetHeight <= 0) {
-                failToast('targetHeight cant be less or equal 0')
+                failToast('Target height cant be less or equal 0')
+                dispatch(statsModel.actions.clearTargetHeightState())
                 return
             }
 
@@ -47,7 +49,7 @@ export const StatsScreenContainer = () => {
         (event) => {
             event.preventDefault()
             history.push({
-                pathname: EDITOR,
+                pathname: editorPathWithId(person.id),
                 state: {
                     person: person,
                     mode: 'view',
