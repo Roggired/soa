@@ -25,6 +25,7 @@ open class GlobalExceptionMapper : ExceptionMapper<RuntimeException> {
         }
 
         private fun handleInvalidData(exception: RuntimeException?): Response {
+            log.error("Invalid data exception", exception)
             return Response
                 .status(Status.BAD_REQUEST)
                 .type(MediaType.APPLICATION_XML_TYPE)

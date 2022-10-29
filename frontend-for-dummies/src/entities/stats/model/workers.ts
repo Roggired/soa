@@ -19,7 +19,7 @@ const parser = new XMLParser()
 
 export function* handleSelectPersons(action: SelectPersonsAction) {
     const response: AxiosResponse = yield call(apiCaller, {
-        route: `/persons/statistics/name/select?namePrefix=${action.payload.namePrefix}`,
+        route: `/persons/statistics/name/select?namePrefix=${btoa(action.payload.namePrefix)}`,
         method: 'POST',
     })
 

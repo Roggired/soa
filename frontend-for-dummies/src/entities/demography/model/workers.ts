@@ -9,7 +9,7 @@ const parser = new XMLParser()
 
 export function* handleGetPercentage(action: GetPercentageAction) {
     const response: AxiosResponse = yield call(apiCaller, {
-        route: `/demography/nationality/${action.payload.nationality}/percentage/${action.payload.hairColor}`,
+        route: `/demography/nationality/${btoa(action.payload.nationality)}/percentage/${action.payload.hairColor}`,
         method: 'POST',
         service: 'DEMOGRAPHY',
     })

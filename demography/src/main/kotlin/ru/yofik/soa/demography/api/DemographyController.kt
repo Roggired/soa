@@ -5,6 +5,8 @@ import ru.yofik.soa.common.ResponseDouble
 import ru.yofik.soa.common.ResponseInteger
 import ru.yofik.soa.common.domain.person.model.Color
 import ru.yofik.soa.demography.domain.DemographyService
+import java.nio.charset.StandardCharsets
+import java.util.Base64
 import javax.inject.Inject
 import javax.ws.rs.POST
 import javax.ws.rs.Path
@@ -26,7 +28,7 @@ class DemographyController {
     ): ResponseDouble {
         return ResponseDouble(
             payload = demographyService!!.getPercentageOfPersonsByHairColorOfSpecifiedNationality(
-                nationality = nationality,
+                nationality = String(Base64.getDecoder().decode(nationality), StandardCharsets.UTF_8),
                 hairColor = convertHairColorToColor(hairColor)
             )
         )

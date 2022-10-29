@@ -4,6 +4,8 @@ import ru.yofik.soa.common.ResponseDouble
 import ru.yofik.soa.common.ResponseInteger
 import ru.yofik.soa.common.ResponseListPerson
 import ru.yofik.soa.collection.domain.statistics.StatisticsService
+import java.nio.charset.StandardCharsets
+import java.util.Base64
 import javax.inject.Inject
 import javax.ws.rs.POST
 import javax.ws.rs.Path
@@ -23,7 +25,7 @@ class StatisticsResource {
     fun selectByName(
         @QueryParam("namePrefix") namePrefix: String
     ): ResponseListPerson = ResponseListPerson(
-        payload = statisticsService!!.selectByName(namePrefix)
+        payload = statisticsService!!.selectByName(String(Base64.getDecoder().decode(namePrefix), StandardCharsets.UTF_8))
     )
 
     @POST

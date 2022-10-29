@@ -31,6 +31,7 @@ dependencies {
     implementation(project(":common"))
 
     // web
+    providedCompile("javax.servlet:javax.servlet-api:4.0.1")
     providedCompile("javax.validation:validation-api:2.0.1.Final")
     providedCompile("javax.ws.rs:javax.ws.rs-api:2.1.1")
 //    implementation("org.jboss.resteasy:resteasy-jaxb-provider:6.2.0.Final")
