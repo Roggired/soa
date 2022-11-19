@@ -1,6 +1,6 @@
 rootProject.name = "soa"
 include("collection")
-include("demography")
+include("services:demography")
 include("common")
 
 pluginManagement {
