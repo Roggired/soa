@@ -11,3 +11,5 @@
 /collection/src/main/webapp/favicon.ico
 /collection/src/main/webapp/index.html
 /certs/
+/services/demography/build/
+/services/demography/.gradle/
