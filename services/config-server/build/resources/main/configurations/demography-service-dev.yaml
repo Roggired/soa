@@ -1,0 +1,6 @@
+retrofit:
+  collection:
+    url: ${COLLECTION_URL}
+  truststore:
+    name: ${TRUSTSTORE}
+    password: ${TRUSTSTORE_PASS}

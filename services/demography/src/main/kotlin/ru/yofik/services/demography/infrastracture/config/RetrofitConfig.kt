@@ -2,6 +2,7 @@ package ru.yofik.services.demography.infrastracture.config
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import retrofit2.Retrofit
@@ -12,12 +13,16 @@ import java.security.KeyStore
 import javax.net.ssl.*
 
 
-const val COLLECTION_SERVICE_URL_ENV = "SOA_COLLECTION_URL"
-const val TRUSTSTORE_ENV = "TRUSTSTORE"
-const val TRUSTSTORE_PASS_ENV = "TRUSTSTORE_PASS"
-
 @Configuration
-class RetrofitConfig {
+class RetrofitConfig(
+    @Value("\${retrofit.collection.url}")
+    private val collectionUrl: String,
+    @Value("\${retrofit.truststore.name}")
+    private val trustStore: String,
+    @Value("\${retrofit.truststore.password}")
+    private val trustStorePassword: String,
+) {
+
     @Bean
     fun collectionApi(): CollectionApi {
 //        val keyStore = KeyStore.getInstance(getTruststoreFile(), getTruststorePass())
@@ -43,23 +48,9 @@ class RetrofitConfig {
 //                    .sslSocketFactory(sslSocketFactory, x509TrustManager)
                     .build()
             )
-            .baseUrl(getCollectionServiceBaseUrl())
+            .baseUrl(collectionUrl)
             .addConverterFactory(JaxbConverterFactory.create())
             .build()
             .create(CollectionApi::class.java)
-    }
-
-    private fun getCollectionServiceBaseUrl(): String {
-        return System.getenv(COLLECTION_SERVICE_URL_ENV) ?: "http://asd.cp"
-//            ?: throw RuntimeException("Env is not specified: $COLLECTION_SERVICE_URL_ENV")
-    }
-
-    private fun getTruststoreFile(): File {
-        return File(System.getenv(TRUSTSTORE_ENV) ?: throw RuntimeException("Env is not specified: $TRUSTSTORE_ENV"))
-    }
-
-    private fun getTruststorePass(): CharArray {
-        return (System.getenv(TRUSTSTORE_PASS_ENV)
-            ?: throw RuntimeException("Env is not specified: $TRUSTSTORE_PASS_ENV")).toCharArray()
     }
 }

@@ -1,3 +1,7 @@
 spring:
+  application:
+    name: demography-service
   profiles:
-    active: dev
+    active: ${DEMOGRAPHY_PROFILE}
+  config:
+    import: "configserver:${CONFIG_SERVER_URL}"

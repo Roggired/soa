@@ -8,12 +8,14 @@ plugins {
 }
 
 group = "ru.yofik"
-version = "0.0.1"
+version = ""
 java.sourceCompatibility = JavaVersion.VERSION_11
 
 repositories {
     mavenCentral()
 }
+
+extra["springCloudVersion"] = "2021.0.5"
 
 dependencies {
     implementation(project(":common"))
@@ -22,11 +24,20 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-jaxb:2.9.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
 
+    implementation("org.springframework.cloud:spring-cloud-starter-config")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+}
+
+dependencyManagement {
+    imports {
+        mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")
+    }
 }
 
 tasks.withType<KotlinCompile> {
