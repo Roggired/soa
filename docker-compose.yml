@@ -8,8 +8,8 @@ services:
     networks:
       soa:
         ipv4_address: 172.18.0.2
+
   server:
-#    image: quay.io/wildfly/wildfly
     build: .
     ports:
       - "20000:8080"
@@ -23,6 +23,16 @@ services:
     networks:
       soa:
         ipv4_address: 172.18.0.3
+
+  consul:
+    image: hashicorp/consul:latest
+    container_name: consul-server
+    restart: always
+    networks:
+      soa:
+        ipv4_address: 172.18.0.3
+    ports:
+      - "8500:8500"
 
 networks:
   soa:
