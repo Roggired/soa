@@ -3,6 +3,7 @@ package ru.yofik.soa.common.domain.person.model
 import ru.yofik.soa.common.utils.ColorJaxbAdapter
 import ru.yofik.soa.common.utils.LocalDateJaxbAdapter
 import ru.yofik.soa.common.utils.LocalDateTimeJaxbAdapter
+import java.io.Serializable
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -13,7 +14,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter
 
 @XmlRootElement(name = "Person")
 @XmlAccessorType(XmlAccessType.FIELD)
-class Person {
+class Person: Serializable {
     var id: Int
     var name: String
     var coordinates: Coordinates
@@ -81,7 +82,7 @@ class Coordinates(
     var id: Long,
     var x: Long,
     var y: Double
-) {
+): Serializable {
     constructor() : this(
         id = 0L,
         x = 0L,
@@ -97,7 +98,7 @@ class Location(
     var y: Float,
     var z: Float,
     var name: String
-) {
+): Serializable {
     constructor() : this(
         id = 0L,
         x = 0L,

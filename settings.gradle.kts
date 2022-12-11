@@ -1,6 +1,7 @@
 rootProject.name = "soa"
-include("collection")
 include("services:demography")
+include("services:collection-ejb")
+include("services:collection-service")
 include("common")
 
 pluginManagement {

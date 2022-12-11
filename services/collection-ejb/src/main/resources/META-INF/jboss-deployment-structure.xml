@@ -1,0 +1,9 @@
+<jboss-deployment-structure xmlns="urn:jboss:deployment-structure:1.0">
+    <deployment>
+        <resources>
+            <resource-root path="common-2.0.jar">
+                <filter/>
+            </resource-root>
+        </resources>
+    </deployment>
+</jboss-deployment-structure>

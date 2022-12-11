@@ -16,5 +16,11 @@
 /services/demography/.gradle/
 /services/demography/build/
 /services/demography/certs/
+/services/collection-ejb/.gradle/
+/services/collection-ejb/build/
+/services/collection-ejb/certs/
+/services/collection-service/.gradle/
+/services/collection-service/build/
+/services/collection-service/certs/
 /services/collection-client/target
 /services/collection-server/target

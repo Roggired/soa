@@ -198,7 +198,7 @@
                     <file-data-store name="default-file-store" path="timer-service-data" relative-to="jboss.server.data.dir"/>
                 </data-stores>
             </timer-service>
-            <remote cluster="ejb" connectors="https-remoting-connector" thread-pool-name="default">
+            <remote cluster="ejb" connectors="http-remoting-connector" thread-pool-name="default">
                 <channel-creation-options>
                     <option name="MAX_OUTBOUND_MESSAGES" value="1234" type="remoting"/>
                 </channel-creation-options>
@@ -434,7 +434,7 @@
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:pojo:1.0"/>
         <subsystem xmlns="urn:jboss:domain:remoting:4.0">
-            <http-connector name="https-remoting-connector" connector-ref="https" sasl-authentication-factory="application-sasl-authentication"/>
+            <http-connector name="http-remoting-connector" connector-ref="http" sasl-authentication-factory="application-sasl-authentication"/>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:request-controller:1.0"/>
         <subsystem xmlns="urn:jboss:domain:resource-adapters:6.1"/>
@@ -459,6 +459,7 @@
         <subsystem xmlns="urn:jboss:domain:undertow:12.0" default-server="default-server" default-virtual-host="default-host" default-servlet-container="default" default-security-domain="other" statistics-enabled="${wildfly.undertow.statistics-enabled:${wildfly.statistics-enabled:false}}">
             <buffer-cache name="default"/>
             <server name="default-server">
+                <http-listener name="http" socket-binding="http" enable-http2="true"/>
                 <https-listener name="https" socket-binding="https" ssl-context="demoSSLContext" enable-http2="true"/>
                 <host name="default-host" alias="localhost">
                     <location name="/" handler="welcome-content"/>
@@ -498,6 +499,7 @@
     </interfaces>
     <socket-binding-group name="standard-sockets" default-interface="public" port-offset="${jboss.socket.binding.port-offset:0}">
         <socket-binding name="ajp" port="${jboss.ajp.port:8009}"/>
+        <socket-binding name="http" port="${jboss.http.port:65100}"/>
         <socket-binding name="https" port="${jboss.https.port:65101}"/>
         <socket-binding name="management-https" interface="management" port="${jboss.management.https.port:65102}"/>
         <socket-binding name="txn-recovery-environment" port="4712"/>
