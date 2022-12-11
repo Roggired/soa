@@ -9,10 +9,24 @@ services:
       soa:
         ipv4_address: 172.18.0.2
 
+  demography-service:
+    depends_on:
+      - consul
+      - db
+    build: ./services/demography
+    dns: 172.18.0.3
+    networks:
+      soa:
+        ipv4_address: 172.18.0.5
+
   server:
+    depends_on:
+      - consul
+      - db
     build: .
-    ports:
-      - "20000:8080"
+    container_name: wildfly-server
+#    ports:
+#      - "20000:8080"
     volumes:
       - ./deployments:/opt/jboss/wildfly/standalone/deployments
     environment:
@@ -20,14 +34,20 @@ services:
       - SOA_USER=soa
       - SOA_PASSWORD=soa
       - SOA_COLLECTION_URL=http://172.18.0.3:8080/collection/
+    dns: 172.18.0.3
     networks:
       soa:
-        ipv4_address: 172.18.0.3
+        ipv4_address: 172.18.0.4
 
   consul:
     image: hashicorp/consul:latest
     container_name: consul-server
     restart: always
+    environment:
+      - CONSUL_BIND_INTERFACE=eth0
+      - CONSUL_ALLOW_PRIVILEGED_PORTS=
+      - CONSUL_LOCAL_CONFIG={"service":{"name":"wildfly","tags":["java-ee"],"address":"172.18.0.4","port":8080},"check":{"id":"tcp","name":"TCP check on port 65101","tcp":"172.18.0.4:65101","interval":"10s","timeout":"2s"}}
+    command: ["agent", "-dev", "-dns-port=53", "-recursor=8.8.8.8", "-client=0.0.0.0"]
     networks:
       soa:
         ipv4_address: 172.18.0.3

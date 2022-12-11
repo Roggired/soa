@@ -24,8 +24,10 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-jaxb:2.9.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
 
-    implementation("org.springframework.cloud:spring-cloud-starter-config")
+//    implementation("org.springframework.cloud:spring-cloud-starter-config")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("org.springframework:spring-oxm:5.3.18")
+    implementation("org.glassfish.jaxb:jaxb-runtime:2.3.7")
 
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")

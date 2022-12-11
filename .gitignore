@@ -15,5 +15,6 @@
 /services/config-server/.gradle/
 /services/demography/.gradle/
 /services/demography/build/
+/services/demography/certs/
 /services/collection-client/target
 /services/collection-server/target

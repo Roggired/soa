@@ -12,7 +12,7 @@ import java.util.*
 
 @CrossOrigin
 @RestController
-@RequestMapping("/demography/v1/demography", produces = [MediaType.APPLICATION_XML_VALUE])
+@RequestMapping("/api/v1/demography", produces = [MediaType.APPLICATION_XML_VALUE])
 class DemographyController(
     private val demographyService: DemographyService
 ) {

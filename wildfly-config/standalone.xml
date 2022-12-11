@@ -329,7 +329,7 @@
                     <key-store name="demoKeyStore">
                         <credential-reference clear-text="111111"/>
                         <implementation type="PKCS12"/>
-                        <file path="Server-keystore.p12" relative-to="jboss.server.config.dir"/>
+                        <file path="wildfly-keystore.p12" relative-to="jboss.server.config.dir"/>
                     </key-store>
                 </key-stores>
                 <key-managers>

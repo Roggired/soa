@@ -1,7 +1,21 @@
-spring:
-  application:
-    name: demography-service
-  profiles:
-    active: ${DEMOGRAPHY_PROFILE}
-  config:
-    import: "configserver:${CONFIG_SERVER_URL}"
+#spring:
+#  application:
+#    name: demography-service
+#  profiles:
+#    active: ${DEMOGRAPHY_PROFILE}
+#  config:
+#    import: "configserver:${CONFIG_SERVER_URL}"
+
+server:
+  ssl:
+    enabled: true
+    key-store: /app-config/spring-keystore.p12
+    key-store-password: 111111
+    key-store-type: PKCS12
+
+retrofit:
+  collection:
+    url: https://wildfly.service.consul:65101/collection/
+  truststore:
+    name: /app-config/spring-truststore.p12
+    password: 111111
