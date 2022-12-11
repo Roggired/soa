@@ -17,3 +17,6 @@
 /services/demography/build/
 /services/collection-client/target
 /services/collection-server/target
+/frontend/build
+/frontend/src/main/resources/static/
+/services/eureka/build

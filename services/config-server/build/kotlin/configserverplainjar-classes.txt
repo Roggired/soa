@@ -1,1 +1,0 @@
-/home/yaroslav/Workspaces/IdeaProjects/soa/services/config-server/build/classes/kotlin/main/ru/yofik/configserver/ConfigServerApplication.class:/home/yaroslav/Workspaces/IdeaProjects/soa/services/config-server/build/classes/kotlin/main/ru/yofik/configserver/ConfigServerApplicationKt.class
