@@ -1,0 +1,31 @@
+server:
+  port: 9050
+
+spring:
+  application:
+    name: zuul-server
+  cloud:
+    gateway:
+      routes:
+        - id: demography
+          uri: lb://demography-service
+          predicates:
+            - Path=/demography/**
+
+
+eureka:
+  client:
+    service-url:
+      default-zone: http://localhost:8761/eureka
+
+
+
+#zuul:
+#  routes:
+#    demography:
+#      path: /demography/**
+ribbon:
+  eureka:
+    enabled: true
+
+#      url: http://localhost:9049/
